@@ -51,17 +51,16 @@ function FormularioPedido({ productos, productoInicial = "" }) {
     setResultado(null);
   }
 
-  function claseCampo(nombreCampo, base = "form-control") {
+  function claseCampo(nombreCampo) {
     if (errores[nombreCampo]) {
-      return base + " is-invalid";
+      return "campo campo-invalido";
     }
-    return intentoEnvio ? base + " is-valid" : base;
+    return intentoEnvio ? "campo campo-valido" : "campo";
   }
-
   return (
-    <form className="formulario-pedido" onSubmit={enviar} noValidate>
-      <div className="mb-3">
-        <label htmlFor="nombre" className="form-label">Nombre completo</label>
+    <form className="border-t-[6px] border-dorado bg-white p-6" onSubmit={enviar} noValidate>
+      <div className="mb-4">
+        <label htmlFor="nombre" className="etiqueta">Nombre completo</label>
         <input
           type="text"
           id="nombre"
@@ -77,8 +76,8 @@ function FormularioPedido({ productos, productoInicial = "" }) {
         {errores.nombre && <Mensaje tipo="campo" id="error-nombre">{errores.nombre}</Mensaje>}
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="correo" className="form-label">Correo electrónico</label>
+      <div className="mb-4">
+        <label htmlFor="correo" className="etiqueta">Correo electrónico</label>
         <input
           type="email"
           id="correo"
@@ -94,12 +93,12 @@ function FormularioPedido({ productos, productoInicial = "" }) {
         {errores.correo && <Mensaje tipo="campo" id="error-correo">{errores.correo}</Mensaje>}
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="producto" className="form-label">Producto</label>
+      <div className="mb-4">
+        <label htmlFor="producto" className="etiqueta">Producto</label>
         <select
           id="producto"
           name="producto"
-          className={claseCampo("producto", "form-select")}
+          className={claseCampo("producto")}
           value={datos.producto}
           onChange={cambiarCampo}
           aria-invalid={errores.producto ? "true" : "false"}
@@ -115,8 +114,8 @@ function FormularioPedido({ productos, productoInicial = "" }) {
         {errores.producto && <Mensaje tipo="campo" id="error-producto">{errores.producto}</Mensaje>}
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="cantidad" className="form-label">Cantidad (de 1 a 10)</label>
+      <div className="mb-4">
+        <label htmlFor="cantidad" className="etiqueta">Cantidad (de 1 a 10)</label>
         <input
           type="number"
           id="cantidad"
@@ -133,12 +132,12 @@ function FormularioPedido({ productos, productoInicial = "" }) {
         {errores.cantidad && <Mensaje tipo="campo" id="error-cantidad">{errores.cantidad}</Mensaje>}
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="comentario" className="form-label">Comentario opcional</label>
+      <div className="mb-4">
+        <label htmlFor="comentario" className="etiqueta">Comentario opcional</label>
         <textarea
           id="comentario"
           name="comentario"
-          className="form-control"
+          className="campo"
           rows="3"
           value={datos.comentario}
           onChange={cambiarCampo}
@@ -146,7 +145,7 @@ function FormularioPedido({ productos, productoInicial = "" }) {
         ></textarea>
       </div>
 
-      <div className="d-flex flex-wrap gap-2 mb-3">
+      <div className="mb-4 flex flex-wrap gap-2">
         <Boton tipo="submit">Calcular total</Boton>
         <Boton variante="secundario" onClick={limpiar}>Limpiar</Boton>
       </div>

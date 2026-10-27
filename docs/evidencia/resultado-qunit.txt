@@ -1,4 +1,4 @@
-﻿Ejecucion de las pruebas: npm run test:web  ->  http://localhost:3002 (navegador integrado, Chromium)
+Ejecucion de las pruebas: npm run test:web  ->  http://localhost:3002 (navegador integrado, Chromium)
 
 QUnit: 10 tests completed in 0.3 seconds. 10 passed, 0 skipped, 0 failed, and 0 todo.
 
@@ -17,8 +17,8 @@ Pruebas (en el orden en que QUnit las ejecutó):
 Cobertura (tabla que muestra la misma pagina):
 Archivo                               Sent %   Ram %  Func %
 components/Boton.jsx                  100.00  100.00  100.00   lineas sin ejecutar: -
-components/Encabezado.jsx              60.00  100.00   50.00   lineas sin ejecutar: 13, 27
-components/FormularioPedido.jsx       100.00   92.11  100.00   lineas sin ejecutar: -
+components/Encabezado.jsx              60.00  100.00   50.00   lineas sin ejecutar: 19, 34
+components/FormularioPedido.jsx       100.00   91.89  100.00   lineas sin ejecutar: -
 components/ListaProductos.jsx         100.00  100.00  100.00   lineas sin ejecutar: -
 components/Mensaje.jsx                100.00  100.00  100.00   lineas sin ejecutar: -
 components/Menu.jsx                   100.00  100.00  100.00   lineas sin ejecutar: -
@@ -27,5 +27,5 @@ components/TarjetaProducto.jsx        100.00  100.00  100.00   lineas sin ejecut
 utils/calcularTotal.js                100.00  100.00  100.00   lineas sin ejecutar: -
 utils/productos.js                    100.00  100.00  100.00   lineas sin ejecutar: -
 utils/validacionesPedido.js            95.83   93.75  100.00   lineas sin ejecutar: 23
-TOTAL                                  94.52   93.94   89.29
-Sentencias 69/73 | Ramas 62/66 | Funciones 25/28
+TOTAL                                  94.59   93.85   89.29
+Sentencias 70/74 | Ramas 61/65 | Funciones 25/28

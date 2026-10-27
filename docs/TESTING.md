@@ -12,7 +12,7 @@ Proyecto Luna y Papel, DSY1104 Evaluación Parcial N.º 2. Los resultados salen 
 | **Uso de mocks** (IE2.3.1 e IE2.3.2) | **No implementado, por decisión del equipo** (sección 4) |
 | Documento de cobertura de testing | Este documento |
 
-Dos diferencias con la pauta, ambas por decisión del equipo: **QUnit en lugar de Jasmine y Karma**, y **sin mocks**. No hay constancia de que el docente las autorice. La pauta no fija un porcentaje mínimo de cobertura.
+Diferencias con la pauta por decisión del equipo: **QUnit en lugar de Jasmine y Karma**, **sin mocks** y **Tailwind CSS en lugar de Bootstrap** (esta última no afecta a las pruebas). No hay constancia de que el docente las autorice. La pauta no fija un porcentaje mínimo de cobertura.
 
 ## 2. Configuración del entorno
 
@@ -38,8 +38,8 @@ Cada prueba sigue **Preparar → Ejecutar → Comprobar**. Cada `QUnit.test(...)
 |---|---|---|---|
 | 1 | `tests/productos.spec.jsx` | La lista muestra los cuatro productos con sus precios | Propiedades, DOM |
 | 2 | `tests/productos.spec.jsx` | Una tarjeta muestra los datos que recibe por propiedades (con un producto inventado) y arma el enlace «Pedir» con su id | Propiedades, DOM |
-| 3 | `tests/encabezado.spec.jsx` | El botón del encabezado abre y cierra el menú (clase `show` y `aria-expanded`) | Estado, evento de clic |
-| 4 | `tests/encabezado.spec.jsx` | El menú marca como activo el enlace de la ruta que recibe por propiedad | Propiedades, DOM |
+| 3 | `tests/encabezado.spec.jsx` | El botón del encabezado abre y cierra el menú (clase `block` del menú y `aria-expanded`) | Estado, evento de clic |
+| 4 | `tests/encabezado.spec.jsx` | El menú marca como activo el enlace de la ruta que recibe por propiedad (`aria-current` y fondo dorado) | Propiedades, DOM |
 | 5 | `tests/formularioPedido.spec.jsx` | Un campo controlado cambia su valor al escribir y no muestra errores antes de enviar | Estado, evento de escritura |
 | 6 | `tests/formularioPedido.spec.jsx` | Un formulario inválido muestra errores, no muestra total, y el error de un campo desaparece al corregirlo | Estado, validación, DOM |
 | 7 | `tests/validaciones.spec.js` | La cantidad acepta enteros de 1 a 10 y rechaza 0, 11, -1, 2.5, vacío y texto | Lógica |
@@ -79,15 +79,15 @@ Cobertura de `src/components` y `src/utils` (tabla generada por la página de pr
 
 | Métrica | Cubierto | Total | % |
 |---|---|---|---|
-| Sentencias | 69 | 73 | 94,52 |
-| Ramas | 62 | 66 | 93,94 |
+| Sentencias | 70 | 74 | 94,59 |
+| Ramas | 61 | 65 | 93,85 |
 | Funciones | 25 | 28 | 89,29 |
 
 | Archivo | Sentencias % | Ramas % | Líneas de sentencias sin ejecutar |
 |---|---|---|---|
 | `components/Boton.jsx`, `ListaProductos.jsx`, `Mensaje.jsx`, `Menu.jsx`, `TarjetaProducto.jsx` | 100 | 100 | |
-| `components/FormularioPedido.jsx` | 100 | 92,11 | ramas sin recorrer (ver 6.2) |
-| `components/Encabezado.jsx` | 60 | 100 | 13, 27 |
+| `components/FormularioPedido.jsx` | 100 | 91,89 | ramas sin recorrer (ver 6.2) |
+| `components/Encabezado.jsx` | 60 | 100 | 19, 34 |
 | `components/PiePagina.jsx` | 0 | 100 | 2 |
 | `utils/calcularTotal.js`, `utils/productos.js` | 100 | 100 | |
 | `utils/validacionesPedido.js` | 95,83 | 93,75 | 23 |
@@ -99,8 +99,8 @@ Tarjetas y lista de productos, menú (apertura y ruta activa), formulario comple
 ### 6.2 Qué quedó pendiente
 
 - **Pie de página** (`PiePagina.jsx`): ninguna prueba lo muestra; es solo texto.
-- **Encabezado, líneas 13 y 27:** cerrar el menú al pulsar la marca o al elegir un enlace. Se probó abrir/cerrar con el botón, no estos dos cierres.
-- **Mensaje de error de cantidad dentro del formulario** (`FormularioPedido.jsx`, línea 133): la regla se prueba como función (caso 7); ninguna prueba muestra ese error en pantalla. Se revisó a mano con 2.5.
+- **Encabezado, líneas 19 y 34:** cerrar el menú al pulsar la marca o al elegir un enlace. Se probó abrir/cerrar con el botón, no estos dos cierres.
+- **Mensaje de error de cantidad dentro del formulario** (`FormularioPedido.jsx`, línea 132): la regla se prueba como función (caso 7); ninguna prueba muestra ese error en pantalla. Se revisó a mano con 2.5.
 - **Producto fuera del catálogo** (`validacionesPedido.js`, línea 23): sin prueba.
 - **No cubierto por diseño:** la conexión con la API (`src/utils/api.js`), las páginas de `src/app/` (se ejecutan en el servidor de Next y no se montan en el navegador de pruebas) y `EncabezadoConRuta.jsx` (usa el enrutador de Next). Se revisaron a mano (sección 7).
 - **Mocks:** ver sección 4. Sin pruebas de extremo a extremo ni de otros navegadores.

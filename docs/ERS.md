@@ -20,7 +20,7 @@ Define lo que hace la aplicación web de Luna y Papel y cómo se comprueba.
 
 **Fuera del alcance:** cobros, pasarelas de pago, envío de correos, guardado de pedidos, cuentas de usuario, administración de productos, carrito de compras, base de datos.
 
-**Diferencia con la pauta.** Su introducción habla de una plantilla con carrito de compras. Luna y Papel **no tiene carrito**: tiene un formulario de un producto y una cantidad, y no se agregó uno por suposición. La pauta nombra Jasmine y Karma; este proyecto usa **QUnit** (decisión del equipo).
+**Diferencia con la pauta.** Su introducción habla de una plantilla con carrito de compras. Luna y Papel **no tiene carrito**: tiene un formulario de un producto y una cantidad, y no se agregó uno por suposición. La pauta nombra Jasmine y Karma y Bootstrap; este proyecto usa **QUnit** y **Tailwind CSS** (decisiones del equipo).
 
 ## 2. Descripción general
 
@@ -77,9 +77,9 @@ Los datos están en `api/productos.json`. La API no guarda nada ni recibe pedido
 
 | Id | Requisito | Estado |
 |---|---|---|
-| RNF-01 | **Responsividad con Bootstrap** en móvil, tablet y escritorio, sin desplazamiento horizontal | Revisado en el navegador a 360, 768 y 1440 px: ninguna ruta se desborda y las imágenes cargan. No probado en dispositivos físicos ni otros navegadores. |
+| RNF-01 | **Responsividad con Tailwind CSS** en móvil, tablet y escritorio, sin desplazamiento horizontal | Revisado en el navegador a 360, 768 y 1440 px: ninguna ruta se desborda y las imágenes cargan. No probado en dispositivos físicos ni otros navegadores. |
 | RNF-02 | Etiquetas asociadas a cada campo; foco visible; mensajes de error comprensibles | Implementado (`htmlFor`, `:focus-visible`, `aria-invalid`, `aria-describedby`). |
-| RNF-03 | Identidad visual: fondo claro, verde oliva, dorado, tipografía Arial e imágenes originales | Implementado en `app/estilos.css`, cargado después de Bootstrap. |
+| RNF-03 | Identidad visual: fondo claro, verde oliva, dorado, tipografía Arial e imágenes originales | Implementado en `app/estilos.css`, con Tailwind CSS. |
 | RNF-04 | Elementos pulsables de al menos 44 px | Definido en CSS para botones y enlaces del menú; no medido con herramienta. |
 | RNF-05 | Contraste de color WCAG 2.1 AA | **No verificado** con herramienta. Se usan los colores del sitio original. |
 | RNF-06 | Mantenibilidad: componentes pequeños, nombres en español, sin comentarios en el código, datos en un solo archivo (`api/productos.json`) | Implementado. |
@@ -89,7 +89,7 @@ Los datos están en `api/productos.json`. La API no guarda nada ni recibe pedido
 
 ## 6. Tecnologías y restricciones
 
-- **Next.js 16** (App Router) con **React 19** y archivos `.jsx`; **Bootstrap 5.3** (solo CSS).
+- **Next.js 16** (App Router) con **React 19** y archivos `.jsx`; **Tailwind CSS 4** (clases de utilidad).
 - **API local** en Node sin librerías (`api/servidor.js`), puerto 3001.
 - **QUnit 3** para las pruebas, servidas por `npm run test:web` (puerto 3002) y vistas en el navegador. Apoyo: esbuild, Testing Library, babel-plugin-istanbul.
 - Node.js 20 o superior.
@@ -110,7 +110,7 @@ Cambios respecto del sitio HTML original:
 
 1. **Next.js con React:** cada parte de la página es un componente con propiedades (`TarjetaProducto`, `ListaProductos`, `Boton`, `Mensaje`, `FormularioPedido`) o con estado (`Encabezado`, `FormularioPedido`). Las tres páginas son rutas de Next.
 2. **API local simulada** que entrega el catálogo, con identificadores. El precio se obtiene del catálogo por id, no de un valor guardado en el formulario (en el HTML original el precio estaba en el `value` de cada opción).
-3. **Bootstrap** para grilla, tarjetas, formulario y navegación responsiva, con CSS propio encima para conservar los colores.
+3. **Tailwind CSS** para grilla, tarjetas, formulario y navegación responsiva, con los colores originales definidos como tema.
 4. **«Pedir» lleva al formulario con el producto preseleccionado.**
 5. **Validación más estricta que la original:** correo `algo@algo.algo` (antes bastaba con "@" y "."), cantidad solo entera de 1 a 10 (antes aceptaba decimales) y producto existente en el catálogo.
 6. **Mensaje de resultado honesto:** el original decía "Pedido recibido"; ahora indica que es un cálculo de demostración. El botón «Calcular y enviar» pasó a «Calcular total» porque no envía nada.
@@ -126,7 +126,7 @@ No se agregó (trabajo futuro posible): carrito con varios productos, persistenc
 | Planificador: "50 hojas desprendibles" | Descripción original: "50 hojas desprendibles para organizar cada semana." |
 | Estuche: "2 compartimentos" | Descripción original: "Estuche liviano con cierre y dos compartimentos." |
 | Mensaje de éxito "Pedido recibido. Total: $…" | Reemplazado por un mensaje de demostración |
-| Sitio estático, sin dependencias, XAMPP/Apache | Next.js, Bootstrap y API local; se ejecuta con `npm run dev` y `npm run api` |
+| Sitio estático, sin dependencias, XAMPP/Apache | Next.js, Tailwind CSS y API local; se ejecuta con `npm run dev` y `npm run api` |
 | Sin base de datos ni API | Hay una API local simulada (sin base de datos) |
 | Tamaño < 500 KB, carga < 3 s, WCAG 2.1 AA | Metas no medidas o no verificadas (ver RNF-05) |
 | Usuario administrador (futuro) | Fuera del alcance |

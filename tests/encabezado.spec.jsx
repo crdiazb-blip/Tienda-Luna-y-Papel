@@ -9,15 +9,15 @@ QUnit.module("Navegación (estado y propiedades)", (hooks) => {
     render(<Encabezado rutaActual="/" />);
     const menu = document.getElementById("menu-principal");
     const boton = screen.getByRole("button", { name: "Mostrar u ocultar el menú" });
-    assert.notOk(menu.classList.contains("show"));
+    assert.notOk(menu.classList.contains("block"));
     assert.equal(boton.getAttribute("aria-expanded"), "false");
 
     fireEvent.click(boton);
-    assert.ok(menu.classList.contains("show"));
+    assert.ok(menu.classList.contains("block"));
     assert.equal(boton.getAttribute("aria-expanded"), "true");
 
     fireEvent.click(boton);
-    assert.notOk(menu.classList.contains("show"));
+    assert.notOk(menu.classList.contains("block"));
   });
 
   QUnit.test("4. el menú marca como activo el enlace de la ruta actual", (assert) => {
@@ -26,7 +26,7 @@ QUnit.module("Navegación (estado y propiedades)", (hooks) => {
     const productos = screen.getByRole("link", { name: "Productos" });
     const inicio = screen.getByRole("link", { name: "Inicio" });
     assert.equal(productos.getAttribute("aria-current"), "page");
-    assert.ok(productos.classList.contains("active"));
+    assert.ok(productos.classList.contains("bg-dorado"));
     assert.equal(inicio.getAttribute("aria-current"), null);
     assert.equal(screen.getByRole("link", { name: "Pedido" }).getAttribute("href"), "/pedido");
   });

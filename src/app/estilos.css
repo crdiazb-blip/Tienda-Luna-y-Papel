@@ -1,194 +1,107 @@
-:root {
-  --bs-body-bg: cornsilk;
-  --bs-body-color: darkslategray;
-  --bs-body-font-family: Arial, sans-serif;
-  --bs-link-color: darkolivegreen;
-  --bs-link-color-rgb: 85, 107, 47;
-  --bs-link-hover-color: #3b4a20;
-  --bs-link-hover-color-rgb: 59, 74, 32;
-  --luna-oliva: darkolivegreen;
-  --luna-dorado: goldenrod;
-  --luna-durazno: moccasin;
+@import "tailwindcss";
+
+@theme {
+  --color-crema: cornsilk;
+  --color-texto: darkslategray;
+  --color-oliva: darkolivegreen;
+  --color-dorado: goldenrod;
+  --color-dorado-oscuro: #b8860b;
+  --color-durazno: moccasin;
+  --color-cafe: saddlebrown;
+  --color-error: firebrick;
 }
 
-body {
-  background-color: cornsilk;
-  color: darkslategray;
+@layer base {
+  body {
+    background-color: var(--color-crema);
+    color: var(--color-texto);
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  h1 {
+    color: var(--color-oliva);
+    font-size: 2.4rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  h2,
+  h3 {
+    color: var(--color-oliva);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  p {
+    margin-bottom: 0.75rem;
+  }
+
+  main a {
+    color: var(--color-oliva);
+    text-decoration: underline;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid black;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--color-dorado);
+  }
+
+  header a:focus-visible,
+  header button:focus-visible {
+    outline-color: white;
+  }
 }
 
-h1, h2, h3, .h4, .h5 {
-  color: var(--luna-oliva);
-}
+@layer components {
+  .titulo {
+    @apply bg-durazno px-5 py-10 text-center;
+  }
 
-h1 {
-  font-size: calc(1.8rem + 1vw);
-  line-height: 1.2;
-}
+  .texto-pequeno {
+    @apply font-bold text-cafe;
+  }
 
-.encabezado,
-.pie-pagina {
-  background-color: var(--luna-oliva);
-  color: white;
-  padding: 12px 20px;
-}
+  .boton {
+    @apply inline-flex min-h-11 cursor-pointer items-center bg-dorado px-4 py-2.5 font-bold text-black no-underline hover:bg-dorado-oscuro;
+  }
 
-.pie-pagina {
-  margin-top: 30px;
-  padding: 20px;
-}
+  main a.boton {
+    color: black;
+    text-decoration: none;
+  }
 
-.marca {
-  color: white;
-  font-size: 1.6rem;
-  font-weight: bold;
-}
+  .boton-gris {
+    @apply bg-gray-300 hover:bg-gray-400;
+  }
 
-.marca:hover,
-.marca:focus {
-  color: white;
-}
+  .etiqueta {
+    @apply mb-1 block font-bold;
+  }
 
-.encabezado .nav-link {
-  color: white;
-  font-weight: bold;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  padding: 8px 14px;
-}
+  .campo {
+    @apply w-full rounded border border-gray-400 bg-white px-3 py-2.5 text-base;
+  }
 
-.encabezado .nav-link:hover,
-.encabezado .nav-link.active {
-  background-color: var(--luna-dorado);
-  color: black;
-}
+  .campo-invalido {
+    @apply border-error bg-red-50;
+  }
 
-.encabezado .navbar-toggler {
-  border-color: white;
-  background-color: rgba(255, 255, 255, 0.15);
-  min-height: 44px;
-  min-width: 44px;
-}
-
-.encabezado .navbar-toggler-icon {
-  filter: invert(1);
-}
-
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 3px solid black;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 5px var(--luna-dorado);
-}
-
-.encabezado a:focus-visible,
-.encabezado button:focus-visible {
-  outline-color: white;
-}
-
-.contenido {
-  padding: 0;
-}
-
-.presentacion,
-.titulo {
-  background-color: var(--luna-durazno);
-}
-
-.titulo {
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.imagen-portada {
-  height: 420px;
-  object-fit: cover;
-}
-
-.imagen-detalle {
-  height: 300px;
-  object-fit: cover;
-}
-
-.detalle {
-  background-color: white;
-}
-
-.texto-pequeno,
-.categoria {
-  color: saddlebrown;
-  font-weight: bold;
-}
-
-.informacion {
-  background-color: var(--luna-oliva);
-  color: white;
-  padding: 18px;
-  text-align: center;
-}
-
-.btn-luna {
-  background-color: var(--luna-dorado);
-  border-color: var(--luna-dorado);
-  color: black;
-  font-weight: bold;
-  min-height: 44px;
-  padding: 10px 18px;
-}
-
-.btn-luna:hover,
-.btn-luna:active {
-  background-color: #b8860b;
-  border-color: #b8860b;
-  color: black;
-}
-
-.btn-secondary {
-  min-height: 44px;
-  padding: 10px 18px;
-  font-weight: bold;
-}
-
-.tarjeta-producto {
-  border: 1px solid tan;
-}
-
-.tarjeta-categoria {
-  border: 0;
-  border-bottom: 5px solid var(--luna-dorado);
-}
-
-.precio {
-  color: var(--luna-oliva);
-  font-size: 1.4rem;
-  font-weight: bold;
-}
-
-.formulario-pedido {
-  background-color: white;
-  border-top: 6px solid var(--luna-dorado);
-  padding: 25px;
-}
-
-.resumen {
-  background-color: var(--luna-durazno);
-  padding: 25px;
-}
-
-.mensaje-campo {
-  color: firebrick;
-  font-size: 0.9rem;
-  margin: 4px 0 0;
-}
-
-.form-label {
-  font-weight: bold;
-}
-
-.formulario-pedido .form-control,
-.formulario-pedido .form-select {
-  background-color: white;
+  .campo-valido {
+    @apply border-green-600 bg-green-50;
+  }
 }

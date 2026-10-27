@@ -16,9 +16,9 @@ export default async function Pedido({ searchParams }) {
         <p>Completa los datos y revisa el total calculado.</p>
       </section>
 
-      <section className="py-4 py-md-5 px-3 px-md-4">
-        <div className="row g-4">
-          <div className="col-lg-8">
+      <section className="px-4 py-8 md:px-8 md:py-12">
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2">
             {productos.length > 0 ? (
               <FormularioPedido productos={productos} productoInicial={productoInicial} />
             ) : (
@@ -27,17 +27,15 @@ export default async function Pedido({ searchParams }) {
               </Mensaje>
             )}
           </div>
-          <div className="col-lg-4">
-            <aside className="resumen">
-              <h2 className="h4">Información de compra</h2>
-              <p>El formulario calcula el valor según el producto y la cantidad.</p>
-              <p>Retiro: Avenida Irarrázaval 1800, Ñuñoa.</p>
-              <p>Horario: lunes a sábado, de 10:00 a 18:00.</p>
-              <p className="mb-0">
-                Proyecto académico: esta página no cobra, no envía correos ni guarda pedidos.
-              </p>
-            </aside>
-          </div>
+          <aside className="bg-durazno p-6">
+            <h2 className="text-xl">Información de compra</h2>
+            <p>El formulario calcula el valor según el producto y la cantidad.</p>
+            <p>Retiro: Avenida Irarrázaval 1800, Ñuñoa.</p>
+            <p>Horario: lunes a sábado, de 10:00 a 18:00.</p>
+            <p className="mb-0">
+              Proyecto académico: esta página no cobra, no envía correos ni guarda pedidos.
+            </p>
+          </aside>
         </div>
       </section>
     </>

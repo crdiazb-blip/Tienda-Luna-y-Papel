@@ -1,6 +1,6 @@
 # Guía para la presentación
 
-La pauta evalúa la presentación de forma **individual** (60 % de la evaluación): cada integrante debe explicar el diseño con el framework, el manejo de propiedades y estados, Bootstrap, las pruebas y el proceso de testeo. Esta guía ayuda a preparar la exposición; no describe resultados de una presentación que aún no ocurre.
+La pauta evalúa la presentación de forma **individual** (60 % de la evaluación): cada integrante debe explicar el diseño con el framework, el manejo de propiedades y estados, el diseño responsivo, las pruebas y el proceso de testeo. Esta guía ayuda a preparar la exposición; no describe resultados de una presentación que aún no ocurre.
 
 Antes de exponer, en la carpeta con `package.json`: `npm install` una vez. Luego dos terminales: `npm run api` y `npm run dev` (tienda en http://localhost:3000). Para las pruebas: `npm run test:web` y abrir la URL que imprime (http://localhost:3002).
 
@@ -8,14 +8,14 @@ Antes de exponer, en la carpeta con `package.json`: `npm install` una vez. Luego
 
 Idea central: **la página se arma con piezas (componentes) reutilizables**, y Next.js entrega cada página según su carpeta.
 
-1. `src/app/layout.jsx` es la estructura común: carga Bootstrap y el CSS propio, y pone el encabezado y el pie en todas las páginas.
+1. `src/app/layout.jsx` es la estructura común: carga Tailwind CSS y los colores de la tienda, y pone el encabezado y el pie en todas las páginas.
 2. Cada carpeta de `src/app/` es una ruta: `page.jsx` es Inicio (`/`), `productos/page.jsx` es `/productos` y `pedido/page.jsx` es `/pedido`.
 3. Las piezas pequeñas están en `src/components/`. Por ejemplo, la página Productos usa `ListaProductos`, que usa `TarjetaProducto`.
 4. Los datos vienen de la **API local** (`api/servidor.js`). Las páginas Productos y Pedido la consultan con `obtenerProductos()` (`src/utils/api.js`) antes de dibujarse. Si la API está apagada, muestran un aviso.
 5. Las reglas están fuera de los componentes, en `src/utils/` (validaciones y total).
 6. Los componentes con estado o eventos llevan `"use client"` en la primera línea (`Encabezado`, `EncabezadoConRuta`, `FormularioPedido`): significa que se ejecutan en el navegador. Las páginas sin estado se dibujan en el servidor.
 
-Decisiones del equipo (no vienen de la pauta, que pide un framework JS como React, Bootstrap, y Jasmine y Karma): Next.js, API local, QUnit.
+Decisiones del equipo (no vienen de la pauta, que pide un framework JS como React, Bootstrap, y Jasmine y Karma): Next.js, API local, QUnit y Tailwind CSS en lugar de Bootstrap.
 
 ## 2. Ejemplo de propiedades y de estado (IE2.1.4)
 
@@ -40,7 +40,7 @@ Preguntas frecuentes: *¿para qué `key` en `map`?* (para que React distinga los
 
 1. El usuario escribe: `cambiarCampo` guarda el valor en `datos` y borra el resultado anterior.
 2. Pulsa «Calcular total»: `enviar` marca `intentoEnvio` y llama `validarPedido` (`src/utils/validacionesPedido.js`).
-3. Con errores, cada campo muestra el suyo (`Mensaje`) con la clase `is-invalid` de Bootstrap, y aparece «Revisa los campos marcados.».
+3. Con errores, cada campo muestra el suyo (`Mensaje`) con borde rojo (clase `campo-invalido`), y aparece «Revisa los campos marcados.».
 4. Sin errores, `calcularTotal(productos, id, cantidad)` (`src/utils/calcularTotal.js`) busca el producto **por id en el catálogo que llegó de la API** y multiplica su precio por la cantidad. El precio no viaja en el formulario.
 5. `formatearPesos` da el texto en pesos chilenos ($13.980) y se muestra el mensaje de demostración: no hay cobro, correo ni guardado.
 6. «Limpiar» deja `datos` en su valor inicial (cantidad 1), `intentoEnvio` en `false` y `resultado` en `null`.
@@ -49,21 +49,21 @@ Reglas: nombre mínimo 3 caracteres; correo `algo@algo.algo`; producto del catá
 
 Alcance: es un formulario de **un** producto, no un carrito.
 
-## 4. Dónde se aplica Bootstrap
+## 4. Dónde se aplica Tailwind CSS (responsividad)
 
-Se importa en `src/app/layout.jsx` (`bootstrap/dist/css/bootstrap.min.css`) antes de `estilos.css`, para que nuestros colores tengan prioridad.
+Se activa con `@import "tailwindcss";` en `src/app/estilos.css` (y `postcss.config.mjs`). Los colores de la tienda están en el bloque `@theme` de ese archivo y se usan como `bg-oliva`, `bg-dorado`, etc. Las clases con prefijo `md:` o `lg:` cambian el diseño en pantallas más anchas (por ejemplo `grid-cols-1 md:grid-cols-2`: una columna en móvil, dos desde tablet).
 
 | Uso | Dónde |
 |---|---|
-| Contenedor `container-lg` | `app/layout.jsx`, `Encabezado.jsx` |
-| Filas y columnas (`row`, `col-md-6`, `col-lg-8`/`col-lg-4`) | `app/page.jsx`, `app/productos/page.jsx`, `app/pedido/page.jsx` |
-| Tarjetas en cuadrícula (`card`, `row-cols-1 row-cols-md-2`) | `ListaProductos.jsx`, `TarjetaProducto.jsx`, `app/page.jsx` |
-| Barra de navegación que se colapsa (`navbar`, `navbar-expand-md`, `navbar-toggler`) | `Encabezado.jsx` |
-| Formulario (`form-label`, `form-control`, `form-select`, `is-valid`, `is-invalid`) y alertas | `FormularioPedido.jsx`, `Mensaje.jsx` |
-| Botones (`btn`) | `Boton.jsx`, `TarjetaProducto.jsx`, `app/page.jsx` |
-| Imágenes (`img-fluid`) y video proporcional (`ratio ratio-16x9`) | `app/page.jsx`, `app/productos/page.jsx` |
+| Contenedor centrado (`mx-auto max-w-[1100px]`) | `app/layout.jsx`, `Encabezado.jsx` |
+| Cuadrículas (`grid`, `md:grid-cols-2`, `lg:grid-cols-3`, `lg:col-span-2`) | `app/page.jsx`, `app/productos/page.jsx`, `app/pedido/page.jsx`, `ListaProductos.jsx` |
+| Tarjetas de producto y categoría (`flex flex-col`, `border`, `p-5`) | `TarjetaProducto.jsx`, `app/page.jsx` |
+| Menú que se colapsa (`hidden md:block` y `block`; el botón usa `md:hidden`) | `Encabezado.jsx`, `Menu.jsx` |
+| Formulario (`.etiqueta`, `.campo`, `.campo-invalido`, `.campo-valido`) y avisos (`Mensaje`) | `FormularioPedido.jsx`, `Mensaje.jsx`, `app/estilos.css` |
+| Botones (`.boton`, `.boton-gris`) | `Boton.jsx`, `TarjetaProducto.jsx`, `app/page.jsx`, `app/estilos.css` |
+| Imágenes (`w-full object-cover`) y video proporcional (`aspect-video w-full`) | `app/page.jsx`, `app/productos/page.jsx` |
 
-El CSS propio solo ajusta colores, foco visible y tamaños mínimos de botones. Para mostrar la responsividad: F12 y modo de dispositivos a 360, 768 y 1440 px. Los tamaños ya revisados están en `docs/TESTING.md`, sección 7.
+`estilos.css` define los colores del tema, los estilos base (títulos, foco visible) y las pocas clases repetidas (botones y campos). Para mostrar la responsividad: F12 y modo de dispositivos a 360, 768 y 1440 px. Los tamaños ya revisados están en `docs/TESTING.md`, sección 7.
 
 ## 5. Cómo demostrar las pruebas (IE2.2.2)
 
@@ -79,7 +79,7 @@ El CSS propio solo ajusta colores, foco visible y tamaños mínimos de botones. 
 
 **Proceso:** se escribe el caso, se recarga la página de pruebas, se corrige, se revisa la cobertura y se anotan los pendientes.
 
-**Resultados** (los registrados en `docs/TESTING.md`; vuelve a ejecutar antes de exponer y usa lo que veas): 10 de 10 pruebas pasan; cobertura de sentencias 94,52 %, ramas 93,94 %, funciones 89,29 %. Pendientes: pie de página, dos cierres del menú, mensaje de error de cantidad dentro del formulario y producto fuera del catálogo. La cobertura no mide `src/app`, la API, CSS ni imágenes, y no garantiza que cada línea esté bien verificada.
+**Resultados** (los registrados en `docs/TESTING.md`; vuelve a ejecutar antes de exponer y usa lo que veas): 10 de 10 pruebas pasan; cobertura de sentencias 94,59 %, ramas 93,85 %, funciones 89,29 %. Pendientes: pie de página, dos cierres del menú, mensaje de error de cantidad dentro del formulario y producto fuera del catálogo. La cobertura no mide `src/app`, la API, CSS ni imágenes, y no garantiza que cada línea esté bien verificada.
 
 **Sobre QUnit y la pauta, decir con claridad:** la pauta nombra Jasmine y Karma. El equipo decidió usar QUnit; esa diferencia no consta como autorizada por el docente.
 
@@ -100,11 +100,11 @@ La pauta permite equipos de hasta 3 y evalúa a cada uno individualmente. Esta e
 - `src/components/ListaProductos.jsx`, `TarjetaProducto.jsx`, `Boton.jsx`, `Mensaje.jsx`
 - `api/servidor.js`, `api/productos.json`, `src/utils/api.js`
 
-**Integrante 2: estado, formulario y Bootstrap**
+**Integrante 2: estado, formulario y Tailwind**
 - `src/components/FormularioPedido.jsx`, `src/app/pedido/page.jsx`
 - `src/components/Encabezado.jsx`, `EncabezadoConRuta.jsx`, `Menu.jsx`
 - `src/utils/validacionesPedido.js`, `calcularTotal.js`, `productos.js`
-- `src/app/estilos.css` y las clases de Bootstrap (sección 4)
+- `src/app/estilos.css` y las clases de Tailwind (sección 4)
 
 **Integrante 3: pruebas y documentación**
 - `tests/servidor.js`, `tests/cobertura.js`
