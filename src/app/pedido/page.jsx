@@ -31,10 +31,7 @@ export default async function Pedido({ searchParams }) {
             <h2 className="text-xl">Información de compra</h2>
             <p>El formulario calcula el valor según el producto y la cantidad.</p>
             <p>Retiro: Avenida Irarrázaval 1800, Ñuñoa.</p>
-            <p>Horario: lunes a sábado, de 10:00 a 18:00.</p>
-            <p className="mb-0">
-              Proyecto académico: esta página no cobra, no envía correos ni guarda pedidos.
-            </p>
+            <p className="mb-0">Horario: lunes a sábado, de 10:00 a 18:00.</p>
           </aside>
         </div>
       </section>
