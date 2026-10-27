@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido | Luna y Papel</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+    <header>
+        <div class="barra">
+            <a class="marca" href="index.html">Luna y Papel</a>
+            <nav>
+                <a href="index.html">Inicio</a>
+                <a href="productos.html">Productos</a>
+                <a class="seleccionado" href="pedido.html">Pedido</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="titulo">
+            <p class="texto-pequeno">Compra sencilla</p>
+            <h1>Solicita tu pedido</h1>
+            <p>Completa los datos y revisa el total antes de enviar.</p>
+        </section>
+
+        <section class="seccion zona-pedido">
+            <form id="formularioPedido" novalidate>
+                <div class="campo">
+                    <label for="nombre">Nombre completo</label>
+                    <input type="text" id="nombre" name="nombre" autocomplete="name" placeholder="Ejemplo: Sofía Rojas">
+                    <small id="errorNombre"></small>
+                </div>
+
+                <div class="campo">
+                    <label for="correo">Correo electrónico</label>
+                    <input type="email" id="correo" name="correo" autocomplete="email" placeholder="nombre@correo.cl">
+                    <small id="errorCorreo"></small>
+                </div>
+
+                <div class="campo">
+                    <label for="producto">Producto</label>
+                    <select id="producto" name="producto">
+                        <option value="">Selecciona una opción</option>
+                        <option value="6990">Cuaderno Punteado</option>
+                        <option value="4500">Set de Destacadores</option>
+                        <option value="5990">Planificador Semanal</option>
+                        <option value="7500">Estuche de Tela</option>
+                    </select>
+                    <small id="errorProducto"></small>
+                </div>
+
+                <div class="campo">
+                    <label for="cantidad">Cantidad</label>
+                    <input type="number" id="cantidad" name="cantidad" min="1" max="10" value="1">
+                    <small id="errorCantidad"></small>
+                </div>
+
+                <div class="campo">
+                    <label for="comentario">Comentario opcional</label>
+                    <textarea id="comentario" name="comentario" rows="3" placeholder="Color o indicación para el pedido"></textarea>
+                </div>
+
+                <button type="submit">Calcular y enviar</button>
+                <button type="reset" class="secundario">Limpiar</button>
+                <p id="resultado" aria-live="polite"></p>
+            </form>
+
+            <aside class="resumen">
+                <h2>Información de compra</h2>
+                <p>El formulario calcula el valor según el producto y la cantidad.</p>
+                <p>Retiro: Avenida Irarrázaval 1800, Ñuñoa.</p>
+                <p>Horario: lunes a sábado, de 10:00 a 18:00.</p>
+                
+            </aside>
+        </section>
+    </main>
+
+    <footer>
+        <p>Luna y Papel | Ñuñoa, Santiago | hola@lunaypapel.cl</p>
+    </footer>
+    <script src="js/script.js"></script>
+</body>
+</html>

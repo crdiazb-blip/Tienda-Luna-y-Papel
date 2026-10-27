@@ -1,0 +1,96 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    background-color: cornsilk;
+    color: darkslategray;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+}
+header, footer {
+    background-color: darkolivegreen;
+    color: white;
+    padding: 20px;
+}
+.barra, main {
+    margin: 0 auto;
+    max-width: 1100px;
+}
+.barra, nav, .presentacion, .categorias, .catalogo,
+.aprender, .detalle, .zona-pedido {
+    align-items: center;
+    display: flex;
+    gap: 20px;
+}
+.marca, nav a {
+    color: white;
+    font-weight: bold;
+    padding: 8px;
+    text-decoration: none;
+}
+.marca { font-size: 26px; }
+.barra { justify-content: space-between; }
+nav a:hover, .seleccionado { background-color: goldenrod; color: black; }
+.presentacion, .titulo { background-color: moccasin; }
+.presentacion { min-height: 420px; }
+.presentacion div, .presentacion img { width: 50%; }
+.presentacion div, .seccion, .titulo { padding: 40px; }
+.presentacion img { height: 420px; object-fit: cover; }
+h1 {
+    color: darkolivegreen;
+    font-size: 44px;
+    line-height: 1.2;
+}
+h2, h3 { color: darkolivegreen; }
+.titulo { text-align: center; }
+.texto-pequeno, .categoria { color: saddlebrown; font-weight: bold; }
+.boton, button {
+    background-color: goldenrod;
+    border: 0;
+    color: black;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    padding: 12px 18px;
+    text-decoration: none;
+}
+.categorias, .catalogo { flex-wrap: wrap; }
+.categorias article, .producto { background-color: white; padding: 20px; }
+.categorias article { border-bottom: 5px solid goldenrod; width: 31%; }
+.producto { border: 1px solid tan; width: 48%; }
+.precio { color: darkolivegreen; font-size: 22px; font-weight: bold; }
+.aprender div, .aprender iframe, .detalle img, .detalle div { width: 50%; }
+.aprender iframe { border: 0; height: 280px; }
+.detalle { background-color: white; margin-bottom: 40px; }
+.detalle img { height: 300px; object-fit: cover; }
+.informacion { background-color: darkolivegreen; color: white; padding: 18px; text-align: center; }
+form, .resumen { padding: 25px; }
+form { background-color: white; border-top: 6px solid goldenrod; width: 65%; }
+.resumen { background-color: moccasin; width: 35%; }
+.campo { margin-bottom: 16px; }
+label, small { display: block; }
+label { font-weight: bold; }
+input, select, textarea {
+    border: 1px solid gray;
+    font-size: 16px;
+    padding: 10px;
+    width: 100%;
+}
+small, #resultado.error { color: firebrick; }
+small { min-height: 20px; }
+.correcto { background-color: honeydew; border-color: green; }
+.incorrecto { background-color: mistyrose; border-color: firebrick; }
+#resultado.exito { color: green; }
+.secundario { background-color: lightgray; }
+footer { margin-top: 30px; text-align: center; }
+@media (max-width: 700px) {
+    .barra, .presentacion, .categorias, .catalogo,
+    .aprender, .detalle, .zona-pedido { display: block; }
+    nav { display: flex; margin-top: 15px; }
+    .presentacion div, .presentacion img, .categorias article,
+    .producto, .aprender div, .aprender iframe, .detalle img,
+    .detalle div, form, .resumen { margin-bottom: 20px; width: 100%; }
+    h1 { font-size: 34px; }
+}
