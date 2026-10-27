@@ -2,8 +2,6 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import FormularioPedido from "../src/components/FormularioPedido";
 import { productos } from "../src/data/productos";
 
-// Ayudas para no repetir código en las pruebas.
-// fireEvent.change simula que el usuario escribe/elige un valor; fireEvent.click, que pulsa un botón.
 function escribir(etiqueta, valor) {
   fireEvent.change(screen.getByLabelText(etiqueta), { target: { value: valor } });
 }
@@ -22,7 +20,6 @@ function pulsarCalcular() {
 
 describe("Formulario de pedido (estado, validación y resultado)", () => {
   beforeEach(() => {
-    // El formulario real, con el catálogo real, sin tocar nada de su lógica
     render(<FormularioPedido productos={productos} />);
   });
 
@@ -30,19 +27,15 @@ describe("Formulario de pedido (estado, validación y resultado)", () => {
     const campoNombre = screen.getByLabelText("Nombre completo");
     expect(campoNombre.value).toBe("");
 
-    // Ejecutar: escribir en el campo
     escribir("Nombre completo", "Sofía Rojas");
 
-    // Comprobar: el valor mostrado viene del estado de React y aún no hay errores
     expect(campoNombre.value).toBe("Sofía Rojas");
     expect(screen.queryByText("Revisa los campos marcados.")).toBeNull();
   });
 
   it("6. un formulario inválido muestra errores, no muestra total y el error se quita al corregir", () => {
-    // Ejecutar: enviar con todo vacío (la cantidad ya parte en 1)
     pulsarCalcular();
 
-    // Comprobar: errores junto a cada campo, aviso general y ningún resultado
     expect(screen.getByText("Escribe tu nombre completo (mínimo 3 letras).")).toBeTruthy();
     expect(screen.getByText("Escribe un correo válido, por ejemplo nombre@correo.cl.")).toBeTruthy();
     expect(screen.getByText("Selecciona un producto.")).toBeTruthy();
@@ -50,18 +43,15 @@ describe("Formulario de pedido (estado, validación y resultado)", () => {
     expect(screen.getByLabelText("Nombre completo").getAttribute("aria-invalid")).toBe("true");
     expect(screen.queryByText(/Cálculo de demostración/)).toBeNull();
 
-    // Corregir solo el nombre: su mensaje desaparece y los demás siguen
     escribir("Nombre completo", "Sofía Rojas");
     expect(screen.queryByText("Escribe tu nombre completo (mínimo 3 letras).")).toBeNull();
     expect(screen.getByText("Selecciona un producto.")).toBeTruthy();
   });
 
   it("9. un formulario válido muestra el total correcto y el mensaje de demostración", () => {
-    // Preparar y ejecutar: 2 cuadernos de $6.990
     llenarDatosCorrectos();
     pulsarCalcular();
 
-    // Comprobar: total = 6990 × 2 = $13.980, aviso de que no hay cobro y sin errores
     const resultado = screen.getByText(/Cálculo de demostración/);
     expect(resultado.textContent).toContain("2 × Cuaderno Punteado");
     expect(resultado.textContent).toContain("Total: $13.980");
@@ -80,14 +70,12 @@ describe("Formulario de pedido (estado, validación y resultado)", () => {
       expect(screen.queryByText("Revisa los campos marcados.")).toBeNull();
     };
 
-    // Caso A: había un resultado correcto en pantalla
     llenarDatosCorrectos();
     pulsarCalcular();
     expect(screen.getByText(/Cálculo de demostración/)).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Limpiar" }));
     verificarFormularioEnBlanco();
 
-    // Caso B: había errores en pantalla
     escribir("Nombre completo", "Ana");
     pulsarCalcular();
     expect(screen.getByText("Selecciona un producto.")).toBeTruthy();

@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 
-// Las categorías son solo contenido informativo (no son filtros del catálogo).
 const categorias = [
   {
     nombre: "Cuadernos",
@@ -64,7 +63,6 @@ function Inicio() {
             <p>Conoce los materiales básicos para comenzar a practicar lettering.</p>
           </div>
           <div className="col-md-6">
-            {/* "ratio ratio-16x9" de Bootstrap mantiene el video proporcionado en cualquier ancho */}
             <div className="ratio ratio-16x9">
               <iframe
                 src="https://www.youtube.com/embed/b1la8oqT6Cw"

@@ -230,24 +230,7 @@
 <a name='L165'></a><a href='#L165'>165</a>
 <a name='L166'></a><a href='#L166'>166</a>
 <a name='L167'></a><a href='#L167'>167</a>
-<a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a>
-<a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a>
-<a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L168'></a><a href='#L168'>168</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -263,23 +246,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
@@ -307,9 +279,6 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -428,7 +397,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState } from "react";
 import Boton from "./Boton";
 import Mensaje from "./Mensaje";
@@ -436,7 +404,6 @@ import { validarPedido } from "../utils/validacionesPedido";
 import { calcularTotal, formatearPesos } from "../utils/calcularTotal";
 import { buscarProducto } from "../data/productos";
 &nbsp;
-// Valores con los que parte (y vuelve a partir) el formulario.
 const datosVacios = {
   nombre: "",
   correo: "",
@@ -445,33 +412,22 @@ const datosVacios = {
   comentario: "",
 };
 &nbsp;
-// Props:
-//   productos        -&gt; arreglo del catálogo, se usa para las opciones del select
-//   productoInicial  -&gt; id del producto que viene preseleccionado (por ejemplo desde "Pedir")
 function FormularioPedido({ productos, productoInicial = "" }) {
-  // ESTADO 1: lo que el usuario ha escrito. Cada campo es "controlado":
-  // su valor sale del estado y cada cambio actualiza el estado.
   const [datos, setDatos] = useState({ ...datosVacios, producto: productoInicial });
-  // ESTADO 2: ¿el usuario ya intentó enviar? Los errores solo se muestran después del primer intento.
   const [intentoEnvio, setIntentoEnvio] = useState(false);
-  // ESTADO 3: el resultado correcto (o null si todavía no hay).
   const [resultado, setResultado] = useState(null);
 &nbsp;
-  // Los errores NO se guardan en un estado: se calculan cada vez que se dibuja el formulario.
-  // Así, cuando el usuario corrige un campo, su mensaje desaparece solo.
   const errores = intentoEnvio ? validarPedido(datos) : {};
   const hayErrores = Object.keys(errores).length &gt; 0;
 &nbsp;
-  // Se ejecuta con cada tecla o cambio en cualquier campo.
-  // "name" del campo coincide con la clave del estado (nombre, correo, producto...).
   function cambiarCampo(evento) {
     const { name, value } = evento.target;
     setDatos({ ...datos, [name]: value });
-    setResultado(null); // el total anterior ya no corresponde a los datos nuevos
+    setResultado(null);
   }
 &nbsp;
   function enviar(evento) {
-    evento.preventDefault(); // evita que el navegador recargue la página
+    evento.preventDefault();
     setIntentoEnvio(true);
     const erroresActuales = validarPedido(datos);
     if (Object.keys(erroresActuales).length &gt; 0) {
@@ -492,9 +448,6 @@ function FormularioPedido({ productos, productoInicial = "" }) {
     setResultado(null);
   }
 &nbsp;
-  // Devuelve la clase de Bootstrap según el estado del campo:
-  // is-invalid (rojo) si tiene error, is-valid (verde) si ya se intentó enviar y está bien.
-  // "base" es la clase de Bootstrap del tipo de campo (form-control o form-select).
   function claseCampo(nombreCampo, base = "form-control") {
     if (errores[nombreCampo]) {
       return base + " is-invalid";
@@ -595,7 +548,6 @@ function FormularioPedido({ productos, productoInicial = "" }) {
         &lt;Boton variante="secundario" onClick={limpiar}&gt;Limpiar&lt;/Boton&gt;
       &lt;/div&gt;
 &nbsp;
-      {/* Zona anunciada por lectores de pantalla cuando cambia (aria-live) */}
       &lt;div aria-live="polite"&gt;
         {hayErrores &amp;&amp; &lt;Mensaje tipo="error"&gt;Revisa los campos marcados.&lt;/Mensaje&gt;}
         {resultado &amp;&amp; (
@@ -619,7 +571,7 @@ export default FormularioPedido;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-27T06:03:30.401Z
+                at 2026-10-27T18:48:08.201Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

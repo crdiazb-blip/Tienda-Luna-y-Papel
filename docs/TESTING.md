@@ -34,7 +34,7 @@ La pauta no fija un porcentaje mínimo de cobertura.
 
 ## 3. Estructura de cada prueba
 
-Todas siguen los pasos **Preparar → Ejecutar → Comprobar**, con comentarios en el código:
+Todas siguen los pasos **Preparar → Ejecutar → Comprobar** (el código no tiene comentarios; el orden se reconoce por la estructura de cada caso):
 
 1. *Preparar*: datos de entrada o montar el componente.
 2. *Ejecutar*: llamar la función o simular el clic/escritura.
@@ -65,7 +65,7 @@ Cada `it(...)` es un caso con un objetivo propio; los `expect` dentro de un caso
   ```powershell
   Select-String -Path tests\* -Pattern "spyOn|createSpy|jasmine.clock|mock|stub|fake|fetch"
   ```
-  El único resultado es un comentario en `tests/validaciones.spec.js` que explica que una lista de valores no es un mock.
+  No devuelve ningún resultado.
 - **Qué NO se considera mock** y sí se usó: entregar listas y textos como entradas a funciones puras; montar componentes reales y enviarles eventos de clic y escritura; el `MemoryRouter` real.
 - **Relación con la pauta:** la pauta **sí evalúa el uso de mocks** (indicadores IE2.3.1 e IE2.3.2: "uso de mocks"). Esta decisión del equipo **no fue autorizada por el docente** (no hay constancia de ello) y **deja ese aspecto pendiente**: el proyecto no puede declararse completo en el nivel máximo de esos indicadores. Si el docente exige mocks, habría que agregarlos antes de la entrega.
 - **Límite técnico:** el proyecto no usa API ni backend (el catálogo es un arreglo local), por lo que no se encontró ninguna dependencia externa que impidiera probar sin reemplazos.
@@ -117,13 +117,13 @@ Cobertura del código de `src/` (herramienta: karma-coverage con istanbul). Info
 |---|---|---|---|
 | `src/App.jsx` | 100 | 100 | |
 | `components/Boton.jsx`, `Mensaje.jsx`, `Menu.jsx`, `PiePagina.jsx`, `ListaProductos.jsx`, `TarjetaProducto.jsx` | 100 | 100 | |
-| `components/FormularioPedido.jsx` | 100 | 92,1 | ramas en líneas 143-146 (ver 7.2) |
-| `components/Encabezado.jsx` | 60 | 50 | 13-22 |
+| `components/FormularioPedido.jsx` | 100 | 92,1 | ramas en líneas 128-131 (ver 7.2) |
+| `components/Encabezado.jsx` | 60 | 50 | 11-20 |
 | `data/productos.js` | 100 | 100 | |
 | `pages/Inicio.jsx`, `Productos.jsx` | 100 | 100 | |
-| `pages/Pedido.jsx` | 100 | 50 | rama de la línea 10 |
+| `pages/Pedido.jsx` | 100 | 50 | rama de la línea 8 |
 | `utils/calcularTotal.js` | 100 | 100 | |
-| `utils/validacionesPedido.js` | 95,83 | 93,75 | línea 27 |
+| `utils/validacionesPedido.js` | 95,83 | 93,75 | línea 23 |
 
 ### 7.1 Qué código se ejecutó y qué comportamientos se comprobaron
 
@@ -131,16 +131,16 @@ Las pruebas ejecutan el catálogo, las tarjetas y su lista, el formulario comple
 
 ### 7.2 Qué quedó pendiente (no cubierto por pruebas automáticas)
 
-- **Menú móvil** (`Encabezado.jsx`, líneas 13-22): el botón que abre y cierra el menú en pantallas pequeñas y su cierre al elegir un enlace. Se revisó **a mano** en el navegador a 360 px; no hay prueba automática.
-- **Mensaje de error de cantidad en pantalla** (`FormularioPedido.jsx`, 143-146): la regla de cantidad se prueba como función (caso 7), pero ninguna prueba muestra ese error dentro del formulario. Se revisó a mano escribiendo 2.5.
-- **`?producto=` inválido** (`Pedido.jsx`, línea 10): si la dirección trae un id que no existe, el producto queda sin elegir. Sin prueba.
-- **Producto fuera del catálogo** (`validacionesPedido.js`, línea 27): el mensaje "El producto elegido no está en el catálogo." no tiene prueba. La interfaz solo ofrece productos del catálogo, por lo que esta rama protege contra datos manipulados.
+- **Menú móvil** (`Encabezado.jsx`, líneas 11-20): el botón que abre y cierra el menú en pantallas pequeñas y su cierre al elegir un enlace. Se revisó **a mano** en el navegador a 360 px; no hay prueba automática.
+- **Mensaje de error de cantidad en pantalla** (`FormularioPedido.jsx`, 128-131): la regla de cantidad se prueba como función (caso 7), pero ninguna prueba muestra ese error dentro del formulario. Se revisó a mano escribiendo 2.5.
+- **`?producto=` inválido** (`Pedido.jsx`, línea 8): si la dirección trae un id que no existe, el producto queda sin elegir. Sin prueba.
+- **Producto fuera del catálogo** (`validacionesPedido.js`, línea 23): el mensaje "El producto elegido no está en el catálogo." no tiene prueba. La interfaz solo ofrece productos del catálogo, por lo que esta rama protege contra datos manipulados.
 - **Mocks**: ver sección 5.
 - Sin pruebas de extremo a extremo, de accesibilidad automática ni de otros navegadores.
 
 ### 7.3 Exclusiones y límites de la medición
 
-- **`src/main.jsx`** no se mide: solo conecta React con `index.html`, y en las pruebas no existe ese `div#root`. Es un archivo corto (15 líneas).
+- **`src/main.jsx`** no se mide: solo conecta React con `index.html`, y en las pruebas no existe ese `div#root`. Es un archivo corto (14 líneas).
 - **No se mide** `node_modules`, la carpeta `tests/`, `prototipo-html/`, los archivos de configuración, el CSS, las imágenes ni el video de YouTube.
 - Los archivos no usados por ninguna prueba **sí** se incluyen (por el paso 7 de la sección 2). Hoy todos los archivos de `src/` (salvo `main.jsx`) están ejecutados por alguna prueba.
 - No se agregaron ejecuciones artificiales de funciones para subir el porcentaje.

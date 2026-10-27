@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Menu from "./Menu";
 
-// Encabezado con la marca y el menú. En pantallas pequeñas el menú se oculta
-// y se abre con el botón de tres líneas. Ese "abierto / cerrado" es un ESTADO de React.
 function Encabezado() {
   const [menuAbierto, setMenuAbierto] = useState(false);
 

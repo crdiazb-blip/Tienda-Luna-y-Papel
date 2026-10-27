@@ -1,6 +1,3 @@
-// Catálogo único de Luna y Papel.
-// Lo usan tanto la página Productos como el formulario de Pedido, así los precios
-// siempre salen de este arreglo y no de un valor escrito en el formulario.
 export const productos = [
   {
     id: "cuaderno-punteado",
@@ -32,7 +29,6 @@ export const productos = [
   },
 ];
 
-// Devuelve el producto con ese id, o undefined si no existe en el catálogo.
 export function buscarProducto(id) {
   return productos.find((producto) => producto.id === id);
 }

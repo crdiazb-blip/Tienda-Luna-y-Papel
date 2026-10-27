@@ -3,8 +3,6 @@ import FormularioPedido from "../components/FormularioPedido";
 import { productos, buscarProducto } from "../data/productos";
 
 function Pedido() {
-  // Si llegamos desde un botón "Pedir", la dirección trae ?producto=<id>.
-  // Solo se preselecciona si ese id existe en el catálogo.
   const [parametros] = useSearchParams();
   const idPedido = parametros.get("producto");
   const productoInicial = buscarProducto(idPedido) ? idPedido : "";

@@ -6,9 +6,6 @@ const enlaces = [
   { ruta: "/pedido", texto: "Pedido" },
 ];
 
-// Lista de enlaces de navegación. NavLink de React Router marca automáticamente
-// con la clase "active" (y aria-current="page") el enlace de la página actual.
-// "alElegir" es una función que llega por props: el Encabezado la usa para cerrar el menú en móvil.
 function Menu({ alElegir }) {
   return (
     <ul className="navbar-nav ms-md-auto">

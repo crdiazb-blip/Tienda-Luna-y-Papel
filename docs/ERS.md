@@ -74,7 +74,7 @@ Estado: **Implementado** significa que existe en el código y fue comprobado (pr
 | RNF-03 | Identidad visual: fondo claro, verde oliva, dorado, tipografía sencilla (Arial) e imágenes originales | Implementado en `src/styles/estilos.css`, cargado después de Bootstrap. |
 | RNF-04 | Tamaño mínimo de elementos pulsables de 44 px | Definido en CSS para botones y enlaces del menú. No medido con una herramienta. |
 | RNF-05 | Contraste de color adecuado (WCAG 2.1 AA) | **No verificado** con herramienta. Se usan los mismos colores del sitio original. |
-| RNF-06 | Mantenibilidad: componentes pequeños, nombres y comentarios en español, catálogo y reglas de validación en archivos propios | Implementado. |
+| RNF-06 | Mantenibilidad: componentes pequeños, nombres en español, sin comentarios en el código, catálogo y reglas de validación en archivos propios | Implementado. |
 | RNF-07 | Datos personales: no se almacenan ni se envían; no hay cookies propias | Implementado (todo ocurre en la memoria de la página). El video de YouTube incrustado puede aplicar sus propias políticas. |
 | RNF-08 | Rendimiento | Compilación de producción (`npm run build`): JS 270,74 kB (86,03 kB comprimido), CSS 232,53 kB (31,61 kB comprimido), más dos imágenes de ~84 kB y ~107 kB. Sin medición de tiempo de carga. |
 | RNF-09 | Compatibilidad | Se ejecutó solo en Chrome (156 en las pruebas). La versión 1.0 mencionaba Firefox, Safari y Edge; no se probaron. |
