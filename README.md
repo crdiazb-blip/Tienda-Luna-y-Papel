@@ -2,7 +2,7 @@
 
 Papelería ficticia de Ñuñoa, Santiago. Proyecto académico de DSY1104 (Desarrollo Fullstack II), Evaluación Parcial N.º 2. La tienda HTML/CSS/JavaScript original se migró a **Next.js (React)** con **Tailwind CSS**, una **API local simulada** para los productos y **pruebas con QUnit** que se ven en el navegador.
 
-Tiene tres secciones: **Inicio** (presentación, categorías informativas, video de lettering y datos de la tienda), **Productos** (catálogo de cuatro artículos) y **Pedido** (formulario con validación y cálculo del total).
+Tiene cuatro secciones: **Inicio** (presentación, categorías informativas, video de lettering y datos de la tienda), **Productos** (catálogo de cuatro artículos) **Pedido** (formulario con validación y cálculo del total) y **Admin** (panel de solo lectura con un resumen del catálogo).
 
 > El formulario es una **demostración académica**: no cobra, no envía correos y no guarda pedidos. No es un carrito de compras: calcula el total de **un** producto por pedido.
 
@@ -10,7 +10,7 @@ Tiene tres secciones: **Inicio** (presentación, categorías informativas, video
 
 | Tecnología | Para qué |
 |---|---|
-| Next.js 16 + React 19 (`.jsx`) | Páginas, rutas (`/`, `/productos`, `/pedido`), componentes, propiedades y estados |
+| Next.js 16 + React 19 (`.jsx`) | Páginas, rutas (`/`, `/productos`, `/pedido`, `/admin`), componentes, propiedades y estados |
 | Tailwind CSS 4 | Diseño responsivo (clases de utilidad) |
 | API local (`api/servidor.js`, Node) | Entrega los productos en `http://localhost:3001/productos` |
 | QUnit 3 | Pruebas unitarias, ejecutadas en una página web |
@@ -54,7 +54,7 @@ src/
     estilos.css                   Tailwind y colores de la identidad visual
   components/                     Encabezado, EncabezadoConRuta, Menu, PiePagina, ListaProductos,
                                   TarjetaProducto, FormularioPedido, Boton, Mensaje
-  utils/                          validacionesPedido.js, calcularTotal.js, productos.js, api.js
+  utils/                          validacionesPedido.js, calcularTotal.js, productos.js, resumenProductos.js, api.js
 tests/                            servidor.js (npm run test:web), cobertura.js y los *.spec.js(x)
 docs/                             ERS.md, TESTING.md, GUIA_PRESENTACION.md, evidencia/
 prototipo-html/                   sitio original HTML/CSS/JS, solo como referencia

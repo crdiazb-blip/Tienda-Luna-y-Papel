@@ -9,7 +9,7 @@ Antes de exponer, en la carpeta con `package.json`: `npm install` una vez. Luego
 Idea central: **la página se arma con piezas (componentes) reutilizables**, y Next.js entrega cada página según su carpeta.
 
 1. `src/app/layout.jsx` es la estructura común: carga Tailwind CSS y los colores de la tienda, y pone el encabezado y el pie en todas las páginas.
-2. Cada carpeta de `src/app/` es una ruta: `page.jsx` es Inicio (`/`), `productos/page.jsx` es `/productos` y `pedido/page.jsx` es `/pedido`.
+2. Cada carpeta de `src/app/` es una ruta: `page.jsx` es Inicio (`/`), `productos/page.jsx` es `/productos` y `pedido/page.jsx` es `/pedido` y `admin/page.jsx` es el panel `/admin`.
 3. Las piezas pequeñas están en `src/components/`. Por ejemplo, la página Productos usa `ListaProductos`, que usa `TarjetaProducto`.
 4. Los datos vienen de la **API local** (`api/servidor.js`). Las páginas Productos y Pedido la consultan con `obtenerProductos()` (`src/utils/api.js`) antes de dibujarse. Si la API está apagada, muestran un aviso.
 5. Las reglas están fuera de los componentes, en `src/utils/` (validaciones y total).
@@ -68,7 +68,7 @@ Se activa con `@import "tailwindcss";` en `src/app/estilos.css` (y `postcss.conf
 ## 5. Cómo demostrar las pruebas (IE2.2.2)
 
 1. Ejecutar `npm run test:web`: imprime la URL. Abrirla en el navegador.
-2. La página muestra los **10 tests en verde** de QUnit y, debajo, la **tabla de cobertura**. Ejecutarlo en vivo, no solo mostrar capturas.
+2. La página muestra los **11 tests en verde** de QUnit y, debajo, la **tabla de cobertura**. Ejecutarlo en vivo, no solo mostrar capturas.
 3. Explicar el entorno: `tests/servidor.js` junta las pruebas con esbuild y las sirve; QUnit las ejecuta en el navegador; Testing Library monta los componentes reales.
 4. Abrir `tests/formularioPedido.spec.jsx` y explicar **Preparar → Ejecutar → Comprobar** con la prueba 9 (formulario válido) o la 10 (Limpiar).
 5. Mostrar una prueba de lógica, `tests/validaciones.spec.js`: «6990 × 2 = 13980».
@@ -79,7 +79,7 @@ Se activa con `@import "tailwindcss";` en `src/app/estilos.css` (y `postcss.conf
 
 **Proceso:** se escribe el caso, se recarga la página de pruebas, se corrige, se revisa la cobertura y se anotan los pendientes.
 
-**Resultados** (los registrados en `docs/TESTING.md`; vuelve a ejecutar antes de exponer y usa lo que veas): 10 de 10 pruebas pasan; cobertura de sentencias 94,52 %, ramas 93,85 %, funciones 89,29 %. Pendientes: pie de página, dos cierres del menú, mensaje de error de cantidad dentro del formulario y producto fuera del catálogo. La cobertura no mide `src/app`, la API, CSS ni imágenes, y no garantiza que cada línea esté bien verificada.
+**Resultados** (los registrados en `docs/TESTING.md`; vuelve a ejecutar antes de exponer y usa lo que veas): 11 de 11 pruebas pasan; cobertura de sentencias 95,40 %, ramas 94,52 %, funciones 91,18 %. Pendientes: pie de página, dos cierres del menú, mensaje de error de cantidad dentro del formulario y producto fuera del catálogo. La cobertura no mide `src/app`, la API, CSS ni imágenes, y no garantiza que cada línea esté bien verificada.
 
 **Sobre QUnit y la pauta, decir con claridad:** la pauta nombra Jasmine y Karma. El equipo decidió usar QUnit; esa diferencia no consta como autorizada por el docente.
 
@@ -98,7 +98,7 @@ La pauta permite equipos de hasta 3 y evalúa a cada uno individualmente. Esta e
 **Integrante 1: estructura, rutas y propiedades**
 - `src/app/layout.jsx`, `src/app/page.jsx`, `src/app/productos/page.jsx`
 - `src/components/ListaProductos.jsx`, `TarjetaProducto.jsx`, `Boton.jsx`, `Mensaje.jsx`
-- `api/servidor.js`, `api/productos.json`, `src/utils/api.js`
+- `src/app/admin/page.jsx`, `src/utils/resumenProductos.js`
 
 **Integrante 2: estado, formulario y Tailwind**
 - `src/components/FormularioPedido.jsx`, `src/app/pedido/page.jsx`

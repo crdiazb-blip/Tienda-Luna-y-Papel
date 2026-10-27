@@ -6,7 +6,7 @@ Proyecto Luna y Papel, DSY1104 Evaluación Parcial N.º 2. Los resultados salen 
 
 | La pauta pide (IE2.2.1, IE2.3.1) | Lo que se hizo |
 |---|---|
-| Pruebas unitarias a componentes frontend **con Jasmine y Karma**; para el nivel máximo, 10 pruebas | 10 casos, pero con **QUnit** (sección 2) |
+| Pruebas unitarias a componentes frontend **con Jasmine y Karma**; para el nivel máximo, 10 pruebas | 11 casos (supera las 10 de la pauta), pero con **QUnit** (sección 2) |
 | Verificar lógica, comportamientos y manipulación del DOM | Funciones puras, componentes montados en el navegador, eventos de clic y escritura |
 | Entorno bien configurado, análisis de resultados y cobertura | Secciones 2, 5 y 6 |
 | **Uso de mocks** (IE2.3.1 e IE2.3.2) | **No implementado, por decisión del equipo** (sección 4) |
@@ -30,7 +30,7 @@ Diferencias con la pauta por decisión del equipo: **QUnit en lugar de Jasmine y
 
 Se necesita solo Node y un navegador; **no** hace falta la API encendida.
 
-## 3. Los diez casos
+## 3. Los once casos
 
 Cada prueba sigue **Preparar → Ejecutar → Comprobar**. Cada `QUnit.test(...)` es un caso con objetivo propio; los `assert` dentro de un caso son los pasos de esa comprobación.
 
@@ -67,11 +67,11 @@ Los datos de las pruebas vienen de `api/productos.json`, el mismo archivo que si
 Última ejecución (detalle en `evidencia/resultado-qunit.txt`):
 
 ```text
-QUnit: 10 tests completed in 0.3 seconds.
-10 passed, 0 skipped, 0 failed, and 0 todo.
+QUnit: 11 tests completed in 0.4 seconds.
+11 passed, 0 skipped, 0 failed, and 0 todo.
 ```
 
-Otros comandos ejecutados: `npm install` (0 vulnerabilidades reportadas), `npm run build` (compila; rutas `/` estática, `/pedido` y `/productos` dinámicas).
+Otros comandos ejecutados: `npm install` (0 vulnerabilidades reportadas), `npm run build` (compila; rutas `/` estática; `/pedido`, `/productos` y `/admin` dinámicas).
 
 ## 6. Cobertura
 
@@ -79,9 +79,9 @@ Cobertura de `src/components` y `src/utils` (tabla generada por la página de pr
 
 | Métrica | Cubierto | Total | % |
 |---|---|---|---|
-| Sentencias | 69 | 73 | 94,52 |
-| Ramas | 61 | 65 | 93,85 |
-| Funciones | 25 | 28 | 89,29 |
+| Sentencias | 83 | 87 | 95,40 |
+| Ramas | 69 | 73 | 94,52 |
+| Funciones | 31 | 34 | 91,18 |
 
 | Archivo | Sentencias % | Ramas % | Líneas de sentencias sin ejecutar |
 |---|---|---|---|
@@ -89,7 +89,7 @@ Cobertura de `src/components` y `src/utils` (tabla generada por la página de pr
 | `components/FormularioPedido.jsx` | 100 | 91,89 | ramas sin recorrer (ver 6.2) |
 | `components/Encabezado.jsx` | 60 | 100 | 19, 34 |
 | `components/PiePagina.jsx` | 0 | 100 | 2 |
-| `utils/calcularTotal.js`, `utils/productos.js` | 100 | 100 | |
+| `utils/calcularTotal.js`, `utils/productos.js`, `utils/resumenProductos.js` | 100 | 100 | |
 | `utils/validacionesPedido.js` | 95,83 | 93,75 | 23 |
 
 ### 6.1 Qué se comprobó
@@ -102,7 +102,7 @@ Tarjetas y lista de productos, menú (apertura y ruta activa), formulario comple
 - **Encabezado, líneas 19 y 34:** cerrar el menú al pulsar la marca o al elegir un enlace. Se probó abrir/cerrar con el botón, no estos dos cierres.
 - **Mensaje de error de cantidad dentro del formulario** (`FormularioPedido.jsx`, línea 126): la regla se prueba como función (caso 7); ninguna prueba muestra ese error en pantalla. Se revisó a mano con 2.5.
 - **Producto fuera del catálogo** (`validacionesPedido.js`, línea 23): sin prueba.
-- **No cubierto por diseño:** la conexión con la API (`src/utils/api.js`), las páginas de `src/app/` (se ejecutan en el servidor de Next y no se montan en el navegador de pruebas) y `EncabezadoConRuta.jsx` (usa el enrutador de Next). Se revisaron a mano (sección 7).
+- **No cubierto por diseño:** la conexión con la API (`src/utils/api.js`), las páginas de `src/app/`, incluida `/admin` (se ejecutan en el servidor de Next y no se montan en el navegador de pruebas) y `EncabezadoConRuta.jsx` (usa el enrutador de Next). Se revisaron a mano (sección 7).
 - **Mocks:** ver sección 4. Sin pruebas de extremo a extremo ni de otros navegadores.
 
 ### 6.3 Exclusiones y límites
@@ -119,7 +119,7 @@ Con `npm run api` y `npm run dev` en marcha, en el navegador integrado (Chromium
 |---|---|
 | API: `GET /productos`, `GET /productos/estuche-tela`, id inexistente | Devuelve los 4 productos, el producto pedido y un 404 |
 | Páginas `/`, `/productos`, `/pedido?producto=estuche-tela` | Cargan; Productos muestra los datos de la API; Pedido trae Estuche de Tela elegido |
-| Clic en «Pedir» del Set de Destacadores | Abre `/pedido?producto=set-destacadores` con ese producto elegido |
+| Página `/admin` | Muestra 4 productos, precio promedio $6.245, más caro Estuche de Tela, más barato Set de Destacadores, una tarjeta por categoría y la tabla de 4 filas; con la API apagada muestra el aviso; a 360 px la página no se desborda (la tabla se desplaza dentro de su caja) | Abre `/pedido?producto=set-destacadores` con ese producto elegido |
 | Anchos 360, 768 y 1440 px en las tres rutas | Sin desplazamiento horizontal; las imágenes cargan |
 | Formulario vacío al enviar | Errores de nombre y correo y aviso «Revisa los campos marcados.» (el producto venía elegido) |
 | Cantidad 2.5 | Rechazada con «La cantidad debe ser un número entero entre 1 y 10.» |

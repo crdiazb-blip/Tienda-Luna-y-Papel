@@ -2,7 +2,7 @@
 
 **Proyecto:** Luna y Papel, frontend de una papelería
 **Asignatura:** DSY1104 Desarrollo Fullstack II, Evaluación Parcial N.º 2
-**Versión:** 3.0 (actualiza la 2.0; la 1.0 describía el sitio HTML/CSS/JS)
+**Versión:** 3.1 (actualiza la 3.0 agregando el panel `/admin`; la 1.0 describía el sitio HTML/CSS/JS)
 **Fecha:** octubre de 2026
 **Integrantes del equipo:** _(completar con los nombres reales; este documento no los inventa)_
 
@@ -18,7 +18,7 @@ Define lo que hace la aplicación web de Luna y Papel y cómo se comprueba.
 
 **Dentro del alcance:** mostrar la tienda, mostrar un catálogo de cuatro productos entregado por una API local simulada y permitir completar un formulario de pedido con validaciones y cálculo del total.
 
-**Fuera del alcance:** cobros, pasarelas de pago, envío de correos, guardado de pedidos, cuentas de usuario, administración de productos, carrito de compras, base de datos.
+**Fuera del alcance:** cobros, pasarelas de pago, envío de correos, guardado de pedidos, cuentas de usuario, inicio de sesión, creación, edición o borrado de productos, carrito de compras, base de datos.
 
 **Diferencia con la pauta.** Su introducción habla de una plantilla con carrito de compras. Luna y Papel **no tiene carrito**: tiene un formulario de un producto y una cantidad, y no se agregó uno por suposición. La pauta nombra Jasmine y Karma y Bootstrap; este proyecto usa **QUnit** y **Tailwind CSS** (decisiones del equipo).
 
@@ -30,7 +30,7 @@ Define lo que hace la aplicación web de Luna y Papel y cómo se comprueba.
 | Productos | `/productos` | Catálogo de cuatro productos (desde la API) con botón «Pedir» |
 | Pedido | `/pedido` | Formulario con validación, total en pesos chilenos y datos de retiro |
 
-Usuario: **cliente** que explora la tienda y calcula un pedido.
+Usuarios: **cliente**, que explora la tienda y calcula un pedido, y **administrador**, que consulta el panel `/admin`. El panel no tiene inicio de sesión ni permisos: es una vista abierta de solo lectura.
 
 **API simulada** (`npm run api`, `http://localhost:3001`):
 
@@ -71,7 +71,7 @@ Los datos están en `api/productos.json`. La API no guarda nada ni recibe pedido
 | RF-13 | Con datos válidos, mostrar el total y un mensaje de demostración: no hay cobro, correo ni guardado | `FormularioPedido.jsx` | Implementado (prueba 9) |
 | RF-14 | «Limpiar» restablece nombre, correo, producto, comentario, errores y resultado; la cantidad vuelve a 1 | `FormularioPedido.jsx` | Implementado (prueba 10) |
 | RF-15 | Mostrar datos de retiro (Avenida Irarrázaval 1800, Ñuñoa; lunes a sábado, 10:00 a 18:00) y la nota de proyecto académico | `app/pedido/page.jsx` | Implementado (revisión manual) |
-| RF-16 | Resultados y errores generales se anuncian con `aria-live="polite"` | `FormularioPedido.jsx` | Implementado (revisión del código; no probado con lector de pantalla) |
+| RF-16 | Panel de administrador (`/admin`): muestra el número de productos, el precio promedio, el producto más caro y el más barato, los productos por categoría y una tabla del catálogo; si la API no responde, muestra un aviso | `app/admin/page.jsx`, `utils/resumenProductos.js` | Implementado (prueba 11 para el cálculo del resumen; la página se revisó a mano) | se anuncian con `aria-live="polite"` | `FormularioPedido.jsx` | Implementado (revisión del código; no probado con lector de pantalla) |
 
 ## 5. Requisitos no funcionales
 
@@ -116,7 +116,7 @@ Cambios respecto del sitio HTML original:
 6. **Mensaje de resultado honesto:** el original decía "Pedido recibido"; ahora le dice al cliente que por ahora solo se calcula el total y que no se cobra, no se envía correo y el pedido no queda guardado. El botón «Calcular y enviar» pasó a «Calcular total» porque no envía nada.
 7. **Pruebas automáticas con QUnit** que se ven en una página web, con tabla de cobertura.
 
-No se agregó (trabajo futuro posible): carrito con varios productos, persistencia de pedidos, panel de administración.
+8. **Panel de administrador de solo lectura** en `/admin`, con un resumen del catálogo y su tabla.
 
 ## 9. Diferencias con el ERS versión 1.0
 
@@ -129,4 +129,4 @@ No se agregó (trabajo futuro posible): carrito con varios productos, persistenc
 | Sitio estático, sin dependencias, XAMPP/Apache | Next.js, Tailwind CSS y API local; se ejecuta con `npm run dev` y `npm run api` |
 | Sin base de datos ni API | Hay una API local simulada (sin base de datos) |
 | Tamaño < 500 KB, carga < 3 s, WCAG 2.1 AA | Metas no medidas o no verificadas (ver RNF-05) |
-| Usuario administrador (futuro) | Fuera del alcance |
+| Usuario administrador (futuro), "agregar o modificar productos y gestionar pedidos" | Solo existe un panel de lectura sin inicio de sesión; no se agregan, modifican ni gestionan datos |
