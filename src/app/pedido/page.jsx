@@ -6,7 +6,8 @@ import { buscarProducto } from "../../utils/productos";
 export default async function Pedido({ searchParams }) {
   const { producto } = await searchParams;
   const productos = await obtenerProductos();
-  const productoInicial = buscarProducto(productos, producto) ? producto : "";
+  const hayProductos = productos !== null && productos.length > 0;
+  const productoInicial = hayProductos && buscarProducto(productos, producto) ? producto : "";
 
   return (
     <>
@@ -19,13 +20,13 @@ export default async function Pedido({ searchParams }) {
       <section className="px-4 py-8 md:px-8 md:py-12">
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            {productos.length > 0 ? (
-              <FormularioPedido productos={productos} productoInicial={productoInicial} />
-            ) : (
+            {productos === null && (
               <Mensaje tipo="error">
                 No se pudieron cargar los productos. Inicia la API con npm run api en otra terminal.
               </Mensaje>
             )}
+            {productos !== null && productos.length === 0 && <p>Por ahora no hay productos disponibles.</p>}
+            {hayProductos && <FormularioPedido productos={productos} productoInicial={productoInicial} />}
           </div>
           <aside className="bg-durazno p-6">
             <h2 className="text-xl">Información de compra</h2>

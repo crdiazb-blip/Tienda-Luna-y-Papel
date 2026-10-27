@@ -61,7 +61,18 @@ El enlace «Administración» está en el pie de página y lleva a `/admin`. La 
 6. **En cada visita al panel** `tokenValido` recalcula ese token y lo compara con el de la cookie (con `timingSafeEqual`). Quien no conoce el secreto no puede fabricar un token válido: una cookie inventada se rechaza (se probó con el valor «falsificada»).
 7. **Cerrar sesión:** `cerrarSesion` borra la cookie y vuelve al login.
 
-Límites que hay que decir en voz alta: las credenciales (`admin` / `1234`) son provisorias y están escritas en el código; hay una sola cuenta; no hay límite de intentos ni HTTPS; el secreto de firma por defecto es de desarrollo (se cambia con la variable `SECRETO_SESION`); y la API de productos del puerto 3001 sigue siendo pública, porque entrega los mismos datos del catálogo público. De todo el flujo, la prueba automática 12 cubre solo la regla de usuario y clave; el resto se comprobó a mano.
+Límites que hay que decir en voz alta: las credenciales (`admin` / `1234`) son provisorias y están escritas en el código; hay una sola cuenta; no hay límite de intentos ni HTTPS; el secreto de firma por defecto es de desarrollo (se cambia con la variable `SECRETO_SESION`); y la lectura de la API de productos (puerto 3001) sigue siendo pública, porque entrega los mismos datos del catálogo público; solo agregar y eliminar están protegidos (ver abajo). De todo el flujo, la prueba automática 12 cubre solo la regla de usuario y clave; el resto se comprobó a mano.
+
+### Cómo se agregan y eliminan productos desde el panel
+
+1. **Formulario y botones.** `src/app/admin/page.jsx` tiene el formulario «Agregar producto» y, en cada fila de la tabla, un botón «Eliminar» (un formulario pequeño con el id oculto). Ambos llaman a acciones del servidor de `src/app/admin/acciones.js`.
+2. **Primero la sesión.** `agregarProducto` y `eliminarProducto` empiezan con `exigirSesion()`: vuelven a comprobar la cookie dentro de la acción, porque una acción del servidor es una dirección que alguien podría llamar sin pasar por la página. Sin sesión redirigen al login y no tocan nada (se comprobó llamándolas sin cookie).
+3. **Validación en el servidor.** `validarProductoNuevo` (`src/utils/validacionesProducto.js`) revisa los largos del texto y que el precio sea un entero entre 1 y 1.000.000. Las pruebas 13 y 14 cubren esta función y `crearIdProducto`, que arma el id desde el nombre («Regla de 30 cm» → `regla-de-30-cm`).
+4. **Hablar con la API.** `src/utils/api.js` envía `POST /productos` o `DELETE /productos/<id>` con el encabezado `x-clave-api`. Esa clave solo existe en el servidor de Next.js: el navegador nunca la ve, así que nadie puede modificar el catálogo llamando directo a la API (sin clave responde 401).
+5. **Guardado.** `api/servidor.js` valida otra vez los datos (400 si faltan, 409 si el id ya existe, 404 al eliminar algo que no existe) y guarda en `api/datos.json`. `api/productos.json` queda intacto: son los 4 productos originales y los que usan las pruebas.
+6. **Avisos.** La acción redirige a `/admin?ok=agregado`, `?ok=eliminado` o `?error=...`, y el panel muestra el mensaje correspondiente.
+
+Límites: no se pueden editar productos (se elimina y se crea de nuevo), eliminar no pide confirmación y no hay prueba automática de la API ni de las acciones; se probaron a mano.
 
 ## 4. Dónde se aplica Tailwind CSS (responsividad)
 
@@ -82,7 +93,7 @@ Se activa con `@import "tailwindcss";` en `src/app/estilos.css` (y `postcss.conf
 ## 5. Cómo demostrar las pruebas (IE2.2.2)
 
 1. Ejecutar `npm run test:web`: imprime la URL. Abrirla en el navegador.
-2. La página muestra los **12 tests en verde** de QUnit y, debajo, la **tabla de cobertura**. Ejecutarlo en vivo, no solo mostrar capturas.
+2. La página muestra los **14 tests en verde** de QUnit y, debajo, la **tabla de cobertura**. Ejecutarlo en vivo, no solo mostrar capturas.
 3. Explicar el entorno: `tests/servidor.js` junta las pruebas con esbuild y las sirve; QUnit las ejecuta en el navegador; Testing Library monta los componentes reales.
 4. Abrir `tests/formularioPedido.spec.jsx` y explicar **Preparar → Ejecutar → Comprobar** con la prueba 9 (formulario válido) o la 10 (Limpiar).
 5. Mostrar una prueba de lógica, `tests/validaciones.spec.js`: «6990 × 2 = 13980».
@@ -93,7 +104,7 @@ Se activa con `@import "tailwindcss";` en `src/app/estilos.css` (y `postcss.conf
 
 **Proceso:** se escribe el caso, se recarga la página de pruebas, se corrige, se revisa la cobertura y se anotan los pendientes.
 
-**Resultados** (los registrados en `docs/TESTING.md`; vuelve a ejecutar antes de exponer y usa lo que veas): 12 de 12 pruebas pasan; cobertura de sentencias 95,56 %, ramas 94,67 %, funciones 91,43 %. Pendientes: pie de página, dos cierres del menú, mensaje de error de cantidad dentro del formulario, producto fuera del catálogo y el flujo completo del inicio de sesión (solo se prueba la regla de usuario y clave). La cobertura no mide `src/app`, la API, la sesión, CSS ni imágenes, y no garantiza que cada línea esté bien verificada.
+**Resultados** (los registrados en `docs/TESTING.md`; vuelve a ejecutar antes de exponer y usa lo que veas): 14 de 14 pruebas pasan; cobertura de sentencias 96,19 %, ramas 95,70 %, funciones 91,89 %. Pendientes: pie de página, dos cierres del menú, mensaje de error de cantidad dentro del formulario, producto fuera del catálogo el flujo completo del inicio de sesión (solo se prueba la regla de usuario y clave) y las acciones de agregar y eliminar productos (solo se prueban la validación y el id). La cobertura no mide `src/app`, la API, la sesión, CSS ni imágenes, y no garantiza que cada línea esté bien verificada.
 
 **Sobre QUnit y la pauta, decir con claridad:** la pauta nombra Jasmine y Karma. El equipo decidió usar QUnit; esa diferencia no consta como autorizada por el docente.
 
@@ -101,7 +112,7 @@ Se activa con `@import "tailwindcss";` en `src/app/estilos.css` (y `postcss.conf
 
 > «Un mock es un reemplazo ficticio de una dependencia para aislar lo que se prueba. La pauta incluye el uso de mocks entre los conceptos del testeo. Nuestro equipo decidió no usar mocks ni espías: probamos los componentes y funciones reales con eventos reales, y las pruebas reciben los productos como datos, sin llamar a la API. Esa omisión fue decisión del equipo, no una autorización del docente, y deja ese aspecto pendiente respecto de la pauta.»
 
-La API simulada **no es un mock de las pruebas**: es un servidor local real que entrega datos fijos a la tienda.
+La API simulada **no es un mock de las pruebas**: es un servidor local real que entrega los productos a la tienda y guarda los cambios del panel.
 
 No afirmar: que el docente aprobó QUnit o la omisión de mocks; que la cobertura implica que todo está probado; que la app es un carrito; que el pedido se guarda, se cobra o se envía por correo.
 
@@ -116,7 +127,7 @@ La pauta permite equipos de hasta 3 y evalúa a cada uno individualmente. Esta e
 - `src/app/admin/page.jsx`, `src/utils/resumenProductos.js`
 
 **Integrante 2: estado, formulario, inicio de sesión y Tailwind**
-- `src/app/admin/login/page.jsx`, `src/app/admin/acciones.js`, `src/utils/credenciales.js`, `src/utils/sesion.js`
+- `src/app/admin/login/page.jsx`, `src/app/admin/acciones.js`, `src/utils/credenciales.js`, `src/utils/sesion.js`, `src/utils/validacionesProducto.js`
 - `src/components/FormularioPedido.jsx`, `src/app/pedido/page.jsx`
 - `src/components/Encabezado.jsx`, `EncabezadoConRuta.jsx`, `Menu.jsx`
 - `src/utils/validacionesPedido.js`, `calcularTotal.js`, `productos.js`

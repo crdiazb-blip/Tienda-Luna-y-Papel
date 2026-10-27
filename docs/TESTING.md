@@ -6,7 +6,7 @@ Proyecto Luna y Papel, DSY1104 Evaluación Parcial N.º 2. Los resultados salen 
 
 | La pauta pide (IE2.2.1, IE2.3.1) | Lo que se hizo |
 |---|---|
-| Pruebas unitarias a componentes frontend **con Jasmine y Karma**; para el nivel máximo, 10 pruebas | 12 casos (supera las 10 de la pauta), pero con **QUnit** (sección 2) |
+| Pruebas unitarias a componentes frontend **con Jasmine y Karma**; para el nivel máximo, 10 pruebas | 14 casos (supera las 10 de la pauta), pero con **QUnit** (sección 2) |
 | Verificar lógica, comportamientos y manipulación del DOM | Funciones puras, componentes montados en el navegador, eventos de clic y escritura |
 | Entorno bien configurado, análisis de resultados y cobertura | Secciones 2, 5 y 6 |
 | **Uso de mocks** (IE2.3.1 e IE2.3.2) | **No implementado, por decisión del equipo** (sección 4) |
@@ -30,7 +30,7 @@ Diferencias con la pauta por decisión del equipo: **QUnit en lugar de Jasmine y
 
 Se necesita solo Node y un navegador; **no** hace falta la API encendida.
 
-## 3. Los doce casos
+## 3. Los catorce casos
 
 Cada prueba sigue **Preparar → Ejecutar → Comprobar**. Cada `QUnit.test(...)` es un caso con objetivo propio; los `assert` dentro de un caso son los pasos de esa comprobación.
 
@@ -48,8 +48,10 @@ Cada prueba sigue **Preparar → Ejecutar → Comprobar**. Cada `QUnit.test(...)
 | 10 | `tests/formularioPedido.spec.jsx` | «Limpiar» restablece campos, cantidad (vuelve a 1), errores y resultado | Estado, evento de clic |
 | 11 | `tests/validaciones.spec.js` | El resumen del panel de administrador calcula total (4), promedio ($6.245), producto más caro y más barato y categorías, y devuelve `null` si no hay productos | Lógica (`resumirProductos`) |
 | 12 | `tests/validaciones.spec.js` | El inicio de sesión acepta solo usuario `admin` con clave `1234` y rechaza clave distinta, usuario con otra mayúscula, otro usuario, vacíos y `null` | Lógica (`validarCredenciales`) |
+| 13 | `tests/validaciones.spec.js` | La validación del producto nuevo acepta datos correctos y rechaza datos vacíos, precios inválidos (0, negativo, decimal, texto, sobre 1.000.000) y un nombre sin letras ni números | Lógica (`validarProductoNuevo`) |
+| 14 | `tests/validaciones.spec.js` | El id del producto se arma con el nombre, sin tildes, mayúsculas ni símbolos (`Cuaderno Punteado` → `cuaderno-punteado`) | Lógica (`crearIdProducto`) |
 
-Los datos de las pruebas vienen de `api/productos.json`, el mismo archivo que sirve la API.
+Los datos de las pruebas vienen de `api/productos.json` (los 4 productos originales), que no cambia aunque se agreguen o eliminen productos desde el panel: esos cambios se guardan en `api/datos.json`.
 
 **Cambio respecto de la versión con React Router:** al pasar a Next.js, la navegación entre páginas la hace el enrutador de Next, que no se monta en estas pruebas. Por eso ya no hay pruebas «pulsar Pedir y ver el formulario» ni «clic en el menú y ver otra sección»; se reemplazaron por las pruebas 3 y 4. Esa navegación se comprobó a mano (sección 7).
 
@@ -61,7 +63,7 @@ Los datos de las pruebas vienen de `api/productos.json`, el mismo archivo que si
   ```
   La búsqueda no devuelve ninguna línea.
 - La pauta **sí evalúa el uso de mocks** (IE2.3.1 e IE2.3.2). Esta omisión **deja ese aspecto pendiente**.
-- **La API "simulada" no es un mock de las pruebas.** Es un servidor local real (`api/servidor.js`) que entrega datos fijos a la tienda. Las pruebas **no la llaman**: reciben los productos como propiedades, leyendo el mismo `api/productos.json`.
+- **La API "simulada" no es un mock de las pruebas.** Es un servidor local real (`api/servidor.js`) que entrega los productos a la tienda y guarda los cambios del panel. Las pruebas **no la llaman**: reciben los productos como propiedades, leyendo `api/productos.json`.
 - Qué sí se usa y no es un mock: listas de valores como entradas de funciones puras, componentes reales con eventos reales.
 
 ## 5. Resultados reales
@@ -69,8 +71,8 @@ Los datos de las pruebas vienen de `api/productos.json`, el mismo archivo que si
 Última ejecución (detalle en `evidencia/resultado-qunit.txt`):
 
 ```text
-QUnit: 12 tests completed in 0.3 seconds.
-12 passed, 0 skipped, 0 failed, and 0 todo.
+QUnit: 14 tests completed in 0.2 seconds.
+14 passed, 0 skipped, 0 failed, and 0 todo.
 ```
 
 Otros comandos ejecutados: `npm install` (0 vulnerabilidades reportadas), `npm run build` (compila; rutas `/` estática; `/pedido`, `/productos` y `/admin` dinámicas).
@@ -81,9 +83,9 @@ Cobertura de `src/components` y `src/utils` (tabla generada por la página de pr
 
 | Métrica | Cubierto | Total | % |
 |---|---|---|---|
-| Sentencias | 86 | 90 | 95,56 |
-| Ramas | 71 | 75 | 94,67 |
-| Funciones | 32 | 35 | 91,43 |
+| Sentencias | 101 | 105 | 96,19 |
+| Ramas | 89 | 93 | 95,70 |
+| Funciones | 34 | 37 | 91,89 |
 
 | Archivo | Sentencias % | Ramas % | Líneas de sentencias sin ejecutar |
 |---|---|---|---|
@@ -91,7 +93,7 @@ Cobertura de `src/components` y `src/utils` (tabla generada por la página de pr
 | `components/FormularioPedido.jsx` | 100 | 91,89 | ramas sin recorrer (ver 6.2) |
 | `components/Encabezado.jsx` | 60 | 100 | 19, 34 |
 | `components/PiePagina.jsx` | 0 | 100 | 4 |
-| `utils/calcularTotal.js`, `productos.js`, `resumenProductos.js`, `credenciales.js` | 100 | 100 | |
+| `utils/calcularTotal.js`, `productos.js`, `resumenProductos.js`, `credenciales.js`, `validacionesProducto.js` | 100 | 100 | |
 | `utils/validacionesPedido.js` | 95,83 | 93,75 | 23 |
 
 ### 6.1 Qué se comprobó
@@ -101,6 +103,7 @@ Tarjetas y lista de productos, menú (apertura y ruta activa), formulario comple
 ### 6.2 Qué quedó pendiente
 
 - **Pie de página** (`PiePagina.jsx`): ninguna prueba lo muestra; es texto y el enlace «Administración».
+- **Agregar y eliminar productos:** solo se prueban la validación del producto y la generación del id (casos 13 y 14). Las acciones del servidor, la API (`POST` y `DELETE`, con clave) y los avisos del panel se comprobaron a mano (sección 7); no tienen prueba automática.
 - **Inicio de sesión completo:** solo se prueba la regla de usuario y clave (caso 12). La cookie de sesión (`utils/sesion.js`), las acciones del servidor, la redirección y el cierre de sesión se comprobaron a mano; no tienen prueba automática porque corren en el servidor de Next.
 - **Encabezado, líneas 19 y 34:** cerrar el menú al pulsar la marca o al elegir un enlace. Se probó abrir/cerrar con el botón, no estos dos cierres.
 - **Mensaje de error de cantidad dentro del formulario** (`FormularioPedido.jsx`, línea 126): la regla se prueba como función (caso 7); ninguna prueba muestra ese error en pantalla. Se revisó a mano con 2.5.
@@ -121,6 +124,16 @@ Con `npm run api` y `npm run dev` en marcha, en el navegador integrado (Chromium
 | Comprobación | Resultado |
 |---|---|
 | API: `GET /productos`, `GET /productos/estuche-tela`, id inexistente | Devuelve los 4 productos, el producto pedido y un 404 |
+| API: `POST /productos` sin clave y con clave equivocada | 401 en ambos casos |
+| API: `POST /productos` con clave y datos válidos; repetido; con datos incompletos | 201 (el total sube a 5); 409; 400 |
+| API: `DELETE /productos/<id>` sin clave; con clave; repetido | 401; 200 (el total vuelve a 4); 404 |
+| `api/productos.json` después de agregar y eliminar | Sigue con los 4 productos originales; los cambios quedan en `api/datos.json` |
+| Panel: agregar «Regla de 30 cm», categoría «accesorios», precio 1990 | Aviso «Producto agregado.»; aparece en la tabla con id `regla-de-30-cm` y categoría `ACCESORIOS`; las tarjetas pasan a 5 productos |
+| Panel: agregar el mismo nombre con otras mayúsculas | Aviso «Ya existe un producto con ese nombre.»; no se duplica |
+| Panel: agregar con nombre de 2 letras | Aviso «Revisa los datos…» (el servidor valida aunque el navegador no lo haga); no se agrega |
+| Páginas públicas con el producto nuevo | `/productos` lo muestra y `/pedido` lo ofrece en la lista |
+| Panel: botón «Eliminar» de la fila nueva | Aviso «Producto eliminado.»; sale de la tabla y de `/productos` |
+| Las tres acciones del panel llamadas sin sesión (petición de formulario sin cookie) | Responden 303 a `/admin/login`; el catálogo sigue con 4 productos |
 | Páginas `/`, `/productos`, `/pedido?producto=estuche-tela` | Cargan; Productos muestra los datos de la API; Pedido trae Estuche de Tela elegido |
 | Clic en «Pedir» del Set de Destacadores | Abre `/pedido?producto=set-destacadores` con ese producto elegido |
 | `/admin` sin sesión | Responde 307 a `/admin/login`; la respuesta no contiene datos del panel |
@@ -138,4 +151,4 @@ Con `npm run api` y `npm run dev` en marcha, en el navegador integrado (Chromium
 | «Limpiar» | Campos vacíos, cantidad 1, sin errores ni resultado |
 | `npm run build` | Compila sin errores |
 
-El formulario se manejó con eventos simulados desde la consola del navegador, no con teclado físico. No se comprobó: el menú móvil a mano en esta versión (lo cubre la prueba 3), el video en reproducción, lectores de pantalla ni contraste con herramientas.
+El formulario y el panel se manejaron con eventos simulados desde la consola del navegador, no con teclado físico. No se comprobó: qué pasa cuando se eliminan todos los productos (el código muestra «Por ahora no hay productos disponibles.» y no se ejecutó), la eliminación con la API apagada, el menú móvil a mano en esta versión (lo cubre la prueba 3), el video en reproducción, lectores de pantalla ni contraste con herramientas.

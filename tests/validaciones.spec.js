@@ -2,6 +2,7 @@ import { validarCantidad } from "../src/utils/validacionesPedido";
 import { calcularTotal, formatearPesos } from "../src/utils/calcularTotal";
 import { resumirProductos } from "../src/utils/resumenProductos";
 import { validarCredenciales } from "../src/utils/credenciales";
+import { validarProductoNuevo, crearIdProducto } from "../src/utils/validacionesProducto";
 import productos from "../api/productos.json";
 
 QUnit.module("Lógica del pedido", () => {
@@ -47,5 +48,24 @@ QUnit.module("Lógica del pedido", () => {
     assert.strictEqual(validarCredenciales("otro", "1234"), false);
     assert.strictEqual(validarCredenciales("", ""), false);
     assert.strictEqual(validarCredenciales(null, null), false);
+  });
+
+  QUnit.test("13. la validación del producto nuevo acepta datos correctos y rechaza datos inválidos", (assert) => {
+    const correcto = { nombre: "Regla de 30 cm", categoria: "Accesorios", descripcion: "Regla transparente de plástico.", precio: "1990" };
+    assert.deepEqual(validarProductoNuevo(correcto), {});
+
+    const vacio = validarProductoNuevo({ nombre: "", categoria: "", descripcion: "", precio: "" });
+    assert.deepEqual(Object.keys(vacio), ["nombre", "categoria", "descripcion", "precio"]);
+
+    ["0", "-5", "12.5", "abc", "1000001"].forEach((precio) => {
+      assert.ok(validarProductoNuevo({ ...correcto, precio }).precio, "precio " + precio + " rechazado");
+    });
+    assert.ok(validarProductoNuevo({ ...correcto, nombre: "!!!" }).nombre);
+  });
+
+  QUnit.test("14. el id del producto se arma con el nombre, sin tildes, mayúsculas ni símbolos", (assert) => {
+    assert.equal(crearIdProducto("Cuaderno Punteado"), "cuaderno-punteado");
+    assert.equal(crearIdProducto("  Lápiz  Ñandú 2B! "), "lapiz-nandu-2b");
+    assert.equal(crearIdProducto("!!!"), "");
   });
 });

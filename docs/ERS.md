@@ -2,7 +2,7 @@
 
 **Proyecto:** Luna y Papel, frontend de una papelería
 **Asignatura:** DSY1104 Desarrollo Fullstack II, Evaluación Parcial N.º 2
-**Versión:** 3.2 (agrega el panel `/admin` con inicio de sesión a la 3.0; la 1.0 describía el sitio HTML/CSS/JS)
+**Versión:** 3.3 (agrega el panel `/admin` con inicio de sesión y gestión de productos a la 3.0; la 1.0 describía el sitio HTML/CSS/JS)
 **Fecha:** octubre de 2026
 **Integrantes del equipo:** _(completar con los nombres reales; este documento no los inventa)_
 
@@ -16,9 +16,9 @@
 
 Define lo que hace la aplicación web de Luna y Papel y cómo se comprueba.
 
-**Dentro del alcance:** mostrar la tienda, mostrar un catálogo de cuatro productos entregado por una API local simulada y permitir completar un formulario de pedido con validaciones y cálculo del total. También hay un panel de administrador de solo lectura, protegido con un inicio de sesión provisorio.
+**Dentro del alcance:** mostrar la tienda, mostrar un catálogo de cuatro productos entregado por una API local simulada y permitir completar un formulario de pedido con validaciones y cálculo del total. También hay un panel de administrador, protegido con un inicio de sesión provisorio, para consultar el catálogo y agregar o eliminar productos.
 
-**Fuera del alcance:** cobros, pasarelas de pago, envío de correos, guardado de pedidos, registro de usuarios y cuentas múltiples, creación, edición o borrado de productos, carrito de compras, base de datos.
+**Fuera del alcance:** cobros, pasarelas de pago, envío de correos, guardado de pedidos, registro de usuarios y cuentas múltiples, edición de productos ya creados, carrito de compras, base de datos.
 
 **Diferencia con la pauta.** Su introducción habla de una plantilla con carrito de compras. Luna y Papel **no tiene carrito**: tiene un formulario de un producto y una cantidad, y no se agregó uno por suposición. La pauta nombra Jasmine y Karma y Bootstrap; este proyecto usa **QUnit** y **Tailwind CSS** (decisiones del equipo).
 
@@ -29,7 +29,7 @@ Define lo que hace la aplicación web de Luna y Papel y cómo se comprueba.
 | Inicio | `/` | Presentación, tres categorías informativas, video de lettering y datos de envío/retiro |
 | Productos | `/productos` | Catálogo de cuatro productos (desde la API) con botón «Pedir» |
 | Pedido | `/pedido` | Formulario con validación, total en pesos chilenos y datos de retiro |
-| Admin | `/admin` | Panel de solo lectura: resumen del catálogo y tabla de productos (desde la API). Pide inicio de sesión |
+| Admin | `/admin` | Panel: resumen del catálogo, tabla de productos, y formulario y botones para agregar y eliminar productos. Pide inicio de sesión |
 | Inicio de sesión | `/admin/login` | Formulario de usuario y contraseña del administrador |
 
 El enlace al panel está en el **pie de página** («Administración»), no en el menú principal.
@@ -40,10 +40,14 @@ Usuarios: **cliente**, que explora la tienda y calcula un pedido, y **administra
 
 | Petición | Respuesta |
 |---|---|
-| `GET /productos` | Arreglo con los 4 productos |
+| `GET /productos` | Arreglo con todos los productos |
 | `GET /productos/<id>` | Un producto, o 404 si no existe |
+| `POST /productos` | Agrega un producto (cuerpo JSON con id, nombre, categoría, descripción y precio entero). 201 si se crea, 400 si los datos no son válidos, 409 si el id ya existe |
+| `DELETE /productos/<id>` | Elimina un producto. 200 si se elimina, 404 si no existe |
 
-Los datos están en `api/productos.json`. La API no guarda nada ni recibe pedidos.
+`POST` y `DELETE` exigen el encabezado `x-clave-api` con la clave de la API; sin ella responden 401. Esa clave solo la usa el servidor de Next.js (valor por defecto de desarrollo; se cambia con la variable `CLAVE_API`), de modo que nadie puede modificar el catálogo hablando directo con la API.
+
+Los productos se guardan en `api/datos.json`, un archivo que la API crea la primera vez copiando `api/productos.json` (los 4 productos originales). La API no recibe pedidos.
 
 ## 3. Catálogo
 
@@ -77,7 +81,10 @@ Los datos están en `api/productos.json`. La API no guarda nada ni recibe pedido
 | RF-15 | Mostrar datos de retiro (Avenida Irarrázaval 1800, Ñuñoa; lunes a sábado, 10:00 a 18:00) | `app/pedido/page.jsx` | Implementado (revisión manual) |
 | RF-16 | Panel de administrador (`/admin`): muestra el número de productos, el precio promedio, el producto más caro y el más barato, los productos por categoría y una tabla del catálogo; si la API no responde, muestra un aviso | `app/admin/page.jsx`, `utils/resumenProductos.js` | Implementado (prueba 11 para el cálculo del resumen; la página se revisó a mano) |
 | RF-17 | El panel exige iniciar sesión: sin sesión válida, `/admin` redirige a `/admin/login`. Solo entra usuario `admin` con contraseña `1234` (provisorias). Error genérico si los datos no coinciden. Botón «Cerrar sesión». El enlace de entrada está en el pie de página | `app/admin/login/page.jsx`, `app/admin/acciones.js`, `utils/credenciales.js`, `utils/sesion.js` | Implementado (prueba 12 para la regla de usuario y clave; el flujo completo se revisó a mano) |
-| RF-18 | Resultados y errores generales se anuncian con `aria-live="polite"` | `FormularioPedido.jsx` | Implementado (revisión del código; no probado con lector de pantalla) |
+| RF-19 | Desde el panel, el administrador puede **agregar un producto** (nombre de 3 a 60 caracteres, categoría de 3 a 30, descripción de 5 a 120 y precio entero de 1 a 1.000.000). El id se genera a partir del nombre (minúsculas, sin tildes ni símbolos); la categoría se guarda en mayúsculas. Se rechazan datos inválidos y nombres repetidos, con un aviso. El producto aparece de inmediato en Productos y en las opciones de Pedido | `app/admin/page.jsx`, `app/admin/acciones.js`, `utils/validacionesProducto.js`, `utils/api.js`, `api/servidor.js` | Implementado (pruebas 13 y 14 para la validación y el id; el flujo completo se revisó a mano) |
+| RF-20 | Desde el panel, el administrador puede **eliminar** un producto con el botón de su fila (sin pedir confirmación). Deja de verse en Productos y en Pedido. Si no queda ningún producto, las páginas públicas muestran «Por ahora no hay productos disponibles.» | `app/admin/page.jsx`, `app/admin/acciones.js`, `api/servidor.js` | Implementado (revisión manual; sin prueba automática) |
+| RF-21 | Las operaciones de agregar y eliminar exigen sesión válida en el servidor (se comprueba otra vez dentro de cada acción) y una clave entre Next.js y la API | `app/admin/acciones.js`, `api/servidor.js` | Implementado y comprobado a mano (sin sesión, las acciones redirigen al login y el catálogo no cambia; la API responde 401 sin clave) |
+| RF-22 | Resultados y errores generales se anuncian con `aria-live="polite"` | `FormularioPedido.jsx` | Implementado (revisión del código; no probado con lector de pantalla) |
 
 ## 5. Requisitos no funcionales
 
@@ -88,7 +95,7 @@ Los datos están en `api/productos.json`. La API no guarda nada ni recibe pedido
 | RNF-03 | Identidad visual: fondo claro, verde oliva, dorado, tipografía Arial e imágenes originales | Implementado en `app/estilos.css`, con Tailwind CSS. |
 | RNF-04 | Elementos pulsables de al menos 44 px | Definido en CSS para botones y enlaces del menú; no medido con herramienta. |
 | RNF-05 | Contraste de color WCAG 2.1 AA | **No verificado** con herramienta. Se usan los colores del sitio original. |
-| RNF-06 | Mantenibilidad: componentes pequeños, nombres en español, sin comentarios en el código, datos en un solo archivo (`api/productos.json`) | Implementado. |
+| RNF-06 | Mantenibilidad: componentes pequeños, nombres en español, sin comentarios en el código, datos de los productos solo en la API (`api/datos.json`, que parte de `api/productos.json`) | Implementado. |
 | RNF-07 | Datos personales: no se almacenan ni se envían | Implementado. El video de YouTube incrustado puede aplicar sus propias políticas. |
 | RNF-08 | Disponibilidad de datos: si la API está apagada, la tienda sigue funcionando y avisa | Implementado (Productos y Pedido muestran el aviso). |
 | RNF-09 | Seguridad básica del panel: la validación ocurre en el servidor (no en el navegador); la sesión es una cookie `httpOnly` firmada que no se puede falsificar sin el secreto del servidor | Implementado y comprobado a mano (sin sesión y con cookie falsa, `/admin` responde 307 a `/admin/login` sin enviar datos). **Límites:** credenciales provisorias escritas en el código, una sola cuenta, sin límite de intentos, sin HTTPS, y el secreto de firma por defecto es de desarrollo (se cambia con la variable `SECRETO_SESION`). No es adecuado para producción. |
@@ -111,6 +118,7 @@ Los datos están en `api/productos.json`. La API no guarda nada ni recibe pedido
 3. **Corregir errores:** con datos inválidos ve el error junto a cada campo; al corregir un campo, su error desaparece.
 4. **Limpiar:** pulsa «Limpiar» y el formulario vuelve al estado inicial.
 5. **Consultar el panel:** el administrador pulsa «Administración» en el pie de página, escribe usuario y contraseña, ve el resumen del catálogo y cierra sesión con el botón correspondiente.
+6. **Agregar o eliminar un producto:** dentro del panel, completa el formulario «Agregar producto» o pulsa «Eliminar» en la fila del producto; ve un aviso de que se hizo, y el cambio se refleja en Productos y Pedido.
 
 ## 8. Propuesta personalizada de Luna y Papel
 
@@ -123,10 +131,11 @@ Cambios respecto del sitio HTML original:
 5. **Validación más estricta que la original:** correo `algo@algo.algo` (antes bastaba con "@" y "."), cantidad solo entera de 1 a 10 (antes aceptaba decimales) y producto existente en el catálogo.
 6. **Mensaje de resultado honesto:** el original decía "Pedido recibido"; ahora le dice al cliente que por ahora solo se calcula el total y que no se cobra, no se envía correo y el pedido no queda guardado. El botón «Calcular y enviar» pasó a «Calcular total» porque no envía nada.
 7. **Pruebas automáticas con QUnit** que se ven en una página web, con tabla de cobertura.
-8. **Panel de administrador de solo lectura** en `/admin`, con un resumen del catálogo y su tabla.
+8. **Panel de administrador** en `/admin`, con un resumen del catálogo y su tabla.
 9. **Inicio de sesión del panel**, validado en el servidor, con el enlace de entrada en el pie de página.
+10. **Agregar y eliminar productos desde el panel**, con la API protegida por una clave y los cambios guardados en un archivo.
 
-No se agregó (trabajo futuro posible): carrito con varios productos, persistencia de pedidos, varias cuentas o contraseñas cifradas en una base de datos, y crear, editar o borrar productos desde el panel.
+No se agregó (trabajo futuro posible): carrito con varios productos, persistencia de pedidos, varias cuentas o contraseñas cifradas en una base de datos, editar productos y pedir confirmación antes de eliminar.
 
 ## 9. Diferencias con el ERS versión 1.0
 
@@ -137,6 +146,6 @@ No se agregó (trabajo futuro posible): carrito con varios productos, persistenc
 | Estuche: "2 compartimentos" | Descripción original: "Estuche liviano con cierre y dos compartimentos." |
 | Mensaje de éxito "Pedido recibido. Total: $…" | Reemplazado por un aviso que aclara que solo se calcula el total |
 | Sitio estático, sin dependencias, XAMPP/Apache | Next.js, Tailwind CSS y API local; se ejecuta con `npm run dev` y `npm run api` |
-| Sin base de datos ni API | Hay una API local simulada (sin base de datos) |
+| Sin base de datos ni API | Hay una API local simulada que guarda en un archivo (sin base de datos) |
 | Tamaño < 500 KB, carga < 3 s, WCAG 2.1 AA | Metas no medidas o no verificadas (ver RNF-05) |
-| Usuario administrador (futuro), "agregar o modificar productos y gestionar pedidos" | Existe un panel de solo lectura con inicio de sesión provisorio; no se agregan, modifican ni gestionan datos |
+| Usuario administrador (futuro), "agregar o modificar productos y gestionar pedidos" | Existe un panel con inicio de sesión provisorio donde se agregan y eliminan productos; no se editan productos ni se gestionan pedidos (los pedidos no se guardan) |

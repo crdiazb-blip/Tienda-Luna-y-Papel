@@ -14,13 +14,13 @@ export default async function Productos() {
       </section>
 
       <section className="px-4 py-8 md:px-8 md:py-12">
-        {productos.length > 0 ? (
-          <ListaProductos productos={productos} />
-        ) : (
+        {productos === null && (
           <Mensaje tipo="error">
             No se pudieron cargar los productos. Inicia la API con npm run api en otra terminal.
           </Mensaje>
         )}
+        {productos !== null && productos.length === 0 && <p>Por ahora no hay productos disponibles.</p>}
+        {productos !== null && productos.length > 0 && <ListaProductos productos={productos} />}
       </section>
 
       <section className="mb-4 bg-white">

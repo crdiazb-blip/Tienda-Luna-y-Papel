@@ -1,6 +1,6 @@
 ﻿Ejecucion de las pruebas: npm run test:web  ->  http://localhost:3002 (navegador integrado, Chromium)
 
-QUnit: 12 tests completed in 0.3 seconds. 12 passed, 0 skipped, 0 failed, and 0 todo.
+QUnit: 14 tests completed in 0.2 seconds. 14 passed, 0 skipped, 0 failed, and 0 todo.
 
 Pruebas (listadas en orden numerico):
  pass | 1. la lista muestra los cuatro productos con sus precios
@@ -15,6 +15,8 @@ Pruebas (listadas en orden numerico):
  pass | 10. Limpiar restablece campos, cantidad, errores y resultado
  pass | 11. el resumen del panel calcula total, promedio, extremos y categorias
  pass | 12. el inicio de sesion acepta solo admin con clave 1234
+ pass | 13. la validacion del producto nuevo acepta datos correctos y rechaza datos invalidos
+ pass | 14. el id del producto se arma con el nombre, sin tildes, mayusculas ni simbolos
 
 Cobertura (tabla que muestra la misma pagina):
 Archivo                               Sent %   Ram %  Func %
@@ -31,5 +33,6 @@ utils/credenciales.js                 100.00  100.00  100.00   lineas sin ejecut
 utils/productos.js                    100.00  100.00  100.00   lineas sin ejecutar: -
 utils/resumenProductos.js             100.00  100.00  100.00   lineas sin ejecutar: -
 utils/validacionesPedido.js            95.83   93.75  100.00   lineas sin ejecutar: 23
-TOTAL                                  95.56   94.67   91.43
-Sentencias 86/90 | Ramas 71/75 | Funciones 32/35
+utils/validacionesProducto.js         100.00  100.00  100.00   lineas sin ejecutar: -
+TOTAL                                  96.19   95.70   91.89
+Sentencias 101/105 | Ramas 89/93 | Funciones 34/37
