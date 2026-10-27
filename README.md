@@ -2,7 +2,7 @@
 
 Papelería ficticia de Ñuñoa, Santiago. Proyecto académico de DSY1104 (Desarrollo Fullstack II), Evaluación Parcial N.º 2. La tienda HTML/CSS/JavaScript original se migró a **Next.js (React)** con **Tailwind CSS**, una **API local simulada** para los productos y **pruebas con QUnit** que se ven en el navegador.
 
-Tiene cuatro secciones: **Inicio** (presentación, categorías informativas, video de lettering y datos de la tienda), **Productos** (catálogo de cuatro artículos) **Pedido** (formulario con validación y cálculo del total) y **Admin** (panel de solo lectura con un resumen del catálogo).
+Tiene cuatro secciones: **Inicio** (presentación, categorías informativas, video de lettering y datos de la tienda), **Productos** (catálogo de cuatro artículos), **Pedido** (formulario con validación y cálculo del total) y **Admin** (panel de solo lectura con un resumen del catálogo, protegido con inicio de sesión; su enlace está en el pie de página).
 
 > El formulario es una **demostración académica**: no cobra, no envía correos y no guarda pedidos. No es un carrito de compras: calcula el total de **un** producto por pedido.
 
@@ -34,7 +34,11 @@ npm run build      # compila la tienda para producción
 npm start          # sirve lo compilado (después de npm run build)
 ```
 
-La tienda necesita la API encendida para mostrar los productos. Si la API está apagada, Productos y Pedido muestran un aviso que lo indica. `npm run test:web` no necesita la API.
+La tienda necesita la API encendida para mostrar los productos. Si la API está apagada, Productos, Pedido y Admin muestran un aviso que lo indica. `npm run test:web` no necesita la API.
+
+## Panel de administrador
+
+Se entra desde el enlace «Administración» del pie de página, o directamente en `/admin`. Pide **usuario `admin` y contraseña `1234`**. Esas credenciales son **provisorias** y están escritas en el código (`src/utils/credenciales.js`); hay que cambiarlas antes de usar el panel en serio. Cómo se valida el inicio de sesión: `docs/GUIA_PRESENTACION.md`, sección 3.
 
 ## Organización de archivos
 
@@ -51,10 +55,14 @@ src/
     page.jsx                      Inicio (/)
     productos/page.jsx            Productos (/productos), pide los datos a la API
     pedido/page.jsx               Pedido (/pedido), pide los datos a la API
+    admin/page.jsx                Panel de administrador (/admin): resumen y tabla del catálogo
+    admin/login/page.jsx          Formulario de inicio de sesión (/admin/login)
+    admin/acciones.js             Acciones del servidor: iniciar y cerrar sesión
     estilos.css                   Tailwind y colores de la identidad visual
   components/                     Encabezado, EncabezadoConRuta, Menu, PiePagina, ListaProductos,
                                   TarjetaProducto, FormularioPedido, Boton, Mensaje
-  utils/                          validacionesPedido.js, calcularTotal.js, productos.js, resumenProductos.js, api.js
+  utils/                          validacionesPedido.js, calcularTotal.js, productos.js,
+                                  resumenProductos.js, credenciales.js, sesion.js, api.js
 tests/                            servidor.js (npm run test:web), cobertura.js y los *.spec.js(x)
 docs/                             ERS.md, TESTING.md, GUIA_PRESENTACION.md, evidencia/
 prototipo-html/                   sitio original HTML/CSS/JS, solo como referencia
@@ -62,10 +70,11 @@ prototipo-html/                   sitio original HTML/CSS/JS, solo como referenc
 
 ## Límites de la demostración
 
-- La API es **simulada**: un servidor local con datos fijos en `api/productos.json`. No hay base de datos, cuentas, pagos ni carrito.
+- La API es **simulada**: un servidor local con datos fijos en `api/productos.json`. No hay base de datos, pagos ni carrito.
 - El pedido no se envía ni se guarda: solo se valida y se calcula el total.
-- La pauta pide **Bootstrap**; este proyecto usa **Tailwind CSS** por decisión del equipo. (decisión del equipo) y usan **QUnit en lugar de Jasmine y Karma**, que son los que nombra la pauta. Ver `docs/TESTING.md`.
-- La cobertura mide `src/components` y `src/utils` (salvo `api.js` y `EncabezadoConRuta.jsx`); no mide `src/app`, CSS ni imágenes.
+- El panel `/admin` es de solo lectura: no crea, edita ni borra productos. Su inicio de sesión usa una sola cuenta provisoria (`admin` / `1234`), sin límite de intentos y sin HTTPS; sirve para la demostración, no para producción.
+- La pauta pide **Bootstrap**, **Jasmine y Karma**; este proyecto usa **Tailwind CSS** y **QUnit** por decisión del equipo. Las pruebas **no usan mocks ni espías** (decisión del equipo) y la pauta evalúa su uso. Ver `docs/TESTING.md`.
+- La cobertura mide `src/components` y `src/utils` (salvo `api.js`, `sesion.js` y `EncabezadoConRuta.jsx`); no mide `src/app`, CSS ni imágenes.
 
 ## Documentos
 

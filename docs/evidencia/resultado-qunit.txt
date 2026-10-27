@@ -1,6 +1,6 @@
 ﻿Ejecucion de las pruebas: npm run test:web  ->  http://localhost:3002 (navegador integrado, Chromium)
 
-QUnit: 11 tests completed in 0.4 seconds. 11 passed, 0 skipped, 0 failed, and 0 todo.
+QUnit: 12 tests completed in 0.3 seconds. 12 passed, 0 skipped, 0 failed, and 0 todo.
 
 Pruebas (listadas en orden numerico):
  pass | 1. la lista muestra los cuatro productos con sus precios
@@ -14,6 +14,7 @@ Pruebas (listadas en orden numerico):
  pass | 9. un formulario valido muestra el total correcto y el aviso de que no se cobra ni se guarda nada
  pass | 10. Limpiar restablece campos, cantidad, errores y resultado
  pass | 11. el resumen del panel calcula total, promedio, extremos y categorias
+ pass | 12. el inicio de sesion acepta solo admin con clave 1234
 
 Cobertura (tabla que muestra la misma pagina):
 Archivo                               Sent %   Ram %  Func %
@@ -23,11 +24,12 @@ components/FormularioPedido.jsx       100.00   91.89  100.00   lineas sin ejecut
 components/ListaProductos.jsx         100.00  100.00  100.00   lineas sin ejecutar: -
 components/Mensaje.jsx                100.00  100.00  100.00   lineas sin ejecutar: -
 components/Menu.jsx                   100.00  100.00  100.00   lineas sin ejecutar: -
-components/PiePagina.jsx                0.00  100.00    0.00   lineas sin ejecutar: 2
+components/PiePagina.jsx                0.00  100.00    0.00   lineas sin ejecutar: 4
 components/TarjetaProducto.jsx        100.00  100.00  100.00   lineas sin ejecutar: -
 utils/calcularTotal.js                100.00  100.00  100.00   lineas sin ejecutar: -
+utils/credenciales.js                 100.00  100.00  100.00   lineas sin ejecutar: -
 utils/productos.js                    100.00  100.00  100.00   lineas sin ejecutar: -
 utils/resumenProductos.js             100.00  100.00  100.00   lineas sin ejecutar: -
 utils/validacionesPedido.js            95.83   93.75  100.00   lineas sin ejecutar: 23
-TOTAL                                  95.40   94.52   91.18
-Sentencias 83/87 | Ramas 69/73 | Funciones 31/34
+TOTAL                                  95.56   94.67   91.43
+Sentencias 86/90 | Ramas 71/75 | Funciones 32/35

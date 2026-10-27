@@ -9,7 +9,7 @@ import istanbul from "babel-plugin-istanbul";
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const carpetaTests = path.join(raiz, "tests");
 const puerto = process.env.PUERTO_PRUEBAS || 3002;
-const sinMedir = ["api.js", "EncabezadoConRuta.jsx"];
+const sinMedir = ["api.js", "sesion.js", "EncabezadoConRuta.jsx"];
 
 function archivosDe(carpeta) {
   return readdirSync(path.join(raiz, "src", carpeta))

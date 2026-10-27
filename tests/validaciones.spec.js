@@ -1,6 +1,7 @@
 import { validarCantidad } from "../src/utils/validacionesPedido";
 import { calcularTotal, formatearPesos } from "../src/utils/calcularTotal";
 import { resumirProductos } from "../src/utils/resumenProductos";
+import { validarCredenciales } from "../src/utils/credenciales";
 import productos from "../api/productos.json";
 
 QUnit.module("Lógica del pedido", () => {
@@ -37,5 +38,14 @@ QUnit.module("Lógica del pedido", () => {
     assert.equal(resumen.categorias.length, 4);
     assert.deepEqual(resumen.categorias[0], { nombre: "CUADERNOS", cantidad: 1 });
     assert.strictEqual(resumirProductos([]), null);
+  });
+
+  QUnit.test("12. el inicio de sesión acepta solo admin con clave 1234", (assert) => {
+    assert.strictEqual(validarCredenciales("admin", "1234"), true);
+    assert.strictEqual(validarCredenciales("admin", "12345"), false);
+    assert.strictEqual(validarCredenciales("Admin", "1234"), false);
+    assert.strictEqual(validarCredenciales("otro", "1234"), false);
+    assert.strictEqual(validarCredenciales("", ""), false);
+    assert.strictEqual(validarCredenciales(null, null), false);
   });
 });

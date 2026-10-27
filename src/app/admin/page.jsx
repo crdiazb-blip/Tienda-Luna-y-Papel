@@ -1,9 +1,19 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import Boton from "../../components/Boton";
 import Mensaje from "../../components/Mensaje";
 import { obtenerProductos } from "../../utils/api";
 import { resumirProductos } from "../../utils/resumenProductos";
 import { formatearPesos } from "../../utils/calcularTotal";
+import { nombreCookie, tokenValido } from "../../utils/sesion";
+import { cerrarSesion } from "./acciones";
 
 export default async function Admin() {
+  const almacen = await cookies();
+  if (!tokenValido(almacen.get(nombreCookie)?.value)) {
+    redirect("/admin/login");
+  }
+
   const productos = await obtenerProductos();
   const resumen = resumirProductos(productos);
 
@@ -13,6 +23,9 @@ export default async function Admin() {
         <p className="texto-pequeno">Administración</p>
         <h1>Panel de administrador</h1>
         <p>Resumen del catálogo que entrega la API. Es una vista de solo lectura.</p>
+        <form action={cerrarSesion}>
+          <Boton tipo="submit" variante="secundario">Cerrar sesión</Boton>
+        </form>
       </section>
 
       <section className="px-4 py-8 md:px-8 md:py-12">

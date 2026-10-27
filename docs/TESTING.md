@@ -6,7 +6,7 @@ Proyecto Luna y Papel, DSY1104 Evaluación Parcial N.º 2. Los resultados salen 
 
 | La pauta pide (IE2.2.1, IE2.3.1) | Lo que se hizo |
 |---|---|
-| Pruebas unitarias a componentes frontend **con Jasmine y Karma**; para el nivel máximo, 10 pruebas | 11 casos (supera las 10 de la pauta), pero con **QUnit** (sección 2) |
+| Pruebas unitarias a componentes frontend **con Jasmine y Karma**; para el nivel máximo, 10 pruebas | 12 casos (supera las 10 de la pauta), pero con **QUnit** (sección 2) |
 | Verificar lógica, comportamientos y manipulación del DOM | Funciones puras, componentes montados en el navegador, eventos de clic y escritura |
 | Entorno bien configurado, análisis de resultados y cobertura | Secciones 2, 5 y 6 |
 | **Uso de mocks** (IE2.3.1 e IE2.3.2) | **No implementado, por decisión del equipo** (sección 4) |
@@ -30,7 +30,7 @@ Diferencias con la pauta por decisión del equipo: **QUnit en lugar de Jasmine y
 
 Se necesita solo Node y un navegador; **no** hace falta la API encendida.
 
-## 3. Los once casos
+## 3. Los doce casos
 
 Cada prueba sigue **Preparar → Ejecutar → Comprobar**. Cada `QUnit.test(...)` es un caso con objetivo propio; los `assert` dentro de un caso son los pasos de esa comprobación.
 
@@ -46,6 +46,8 @@ Cada prueba sigue **Preparar → Ejecutar → Comprobar**. Cada `QUnit.test(...)
 | 8 | `tests/validaciones.spec.js` | El total es precio × cantidad (6990 × 2 = 13980; 7500 × 3 = 22500), devuelve `null` si el producto no existe y se formatea `$13.980` | Lógica |
 | 9 | `tests/formularioPedido.spec.jsx` | Un formulario válido muestra el total correcto y el aviso de que no se cobra ni se guarda nada | Estado, evento de envío, DOM |
 | 10 | `tests/formularioPedido.spec.jsx` | «Limpiar» restablece campos, cantidad (vuelve a 1), errores y resultado | Estado, evento de clic |
+| 11 | `tests/validaciones.spec.js` | El resumen del panel de administrador calcula total (4), promedio ($6.245), producto más caro y más barato y categorías, y devuelve `null` si no hay productos | Lógica (`resumirProductos`) |
+| 12 | `tests/validaciones.spec.js` | El inicio de sesión acepta solo usuario `admin` con clave `1234` y rechaza clave distinta, usuario con otra mayúscula, otro usuario, vacíos y `null` | Lógica (`validarCredenciales`) |
 
 Los datos de las pruebas vienen de `api/productos.json`, el mismo archivo que sirve la API.
 
@@ -67,8 +69,8 @@ Los datos de las pruebas vienen de `api/productos.json`, el mismo archivo que si
 Última ejecución (detalle en `evidencia/resultado-qunit.txt`):
 
 ```text
-QUnit: 11 tests completed in 0.4 seconds.
-11 passed, 0 skipped, 0 failed, and 0 todo.
+QUnit: 12 tests completed in 0.3 seconds.
+12 passed, 0 skipped, 0 failed, and 0 todo.
 ```
 
 Otros comandos ejecutados: `npm install` (0 vulnerabilidades reportadas), `npm run build` (compila; rutas `/` estática; `/pedido`, `/productos` y `/admin` dinámicas).
@@ -79,17 +81,17 @@ Cobertura de `src/components` y `src/utils` (tabla generada por la página de pr
 
 | Métrica | Cubierto | Total | % |
 |---|---|---|---|
-| Sentencias | 83 | 87 | 95,40 |
-| Ramas | 69 | 73 | 94,52 |
-| Funciones | 31 | 34 | 91,18 |
+| Sentencias | 86 | 90 | 95,56 |
+| Ramas | 71 | 75 | 94,67 |
+| Funciones | 32 | 35 | 91,43 |
 
 | Archivo | Sentencias % | Ramas % | Líneas de sentencias sin ejecutar |
 |---|---|---|---|
 | `components/Boton.jsx`, `ListaProductos.jsx`, `Mensaje.jsx`, `Menu.jsx`, `TarjetaProducto.jsx` | 100 | 100 | |
 | `components/FormularioPedido.jsx` | 100 | 91,89 | ramas sin recorrer (ver 6.2) |
 | `components/Encabezado.jsx` | 60 | 100 | 19, 34 |
-| `components/PiePagina.jsx` | 0 | 100 | 2 |
-| `utils/calcularTotal.js`, `utils/productos.js`, `utils/resumenProductos.js` | 100 | 100 | |
+| `components/PiePagina.jsx` | 0 | 100 | 4 |
+| `utils/calcularTotal.js`, `productos.js`, `resumenProductos.js`, `credenciales.js` | 100 | 100 | |
 | `utils/validacionesPedido.js` | 95,83 | 93,75 | 23 |
 
 ### 6.1 Qué se comprobó
@@ -98,11 +100,12 @@ Tarjetas y lista de productos, menú (apertura y ruta activa), formulario comple
 
 ### 6.2 Qué quedó pendiente
 
-- **Pie de página** (`PiePagina.jsx`): ninguna prueba lo muestra; es solo texto.
+- **Pie de página** (`PiePagina.jsx`): ninguna prueba lo muestra; es texto y el enlace «Administración».
+- **Inicio de sesión completo:** solo se prueba la regla de usuario y clave (caso 12). La cookie de sesión (`utils/sesion.js`), las acciones del servidor, la redirección y el cierre de sesión se comprobaron a mano; no tienen prueba automática porque corren en el servidor de Next.
 - **Encabezado, líneas 19 y 34:** cerrar el menú al pulsar la marca o al elegir un enlace. Se probó abrir/cerrar con el botón, no estos dos cierres.
 - **Mensaje de error de cantidad dentro del formulario** (`FormularioPedido.jsx`, línea 126): la regla se prueba como función (caso 7); ninguna prueba muestra ese error en pantalla. Se revisó a mano con 2.5.
 - **Producto fuera del catálogo** (`validacionesPedido.js`, línea 23): sin prueba.
-- **No cubierto por diseño:** la conexión con la API (`src/utils/api.js`), las páginas de `src/app/`, incluida `/admin` (se ejecutan en el servidor de Next y no se montan en el navegador de pruebas) y `EncabezadoConRuta.jsx` (usa el enrutador de Next). Se revisaron a mano (sección 7).
+- **No cubierto por diseño:** la conexión con la API (`src/utils/api.js`), la sesión (`src/utils/sesion.js`, usa módulos de Node), las páginas de `src/app/`, incluida `/admin` (se ejecutan en el servidor de Next y no se montan en el navegador de pruebas) y `EncabezadoConRuta.jsx` (usa el enrutador de Next). Se revisaron a mano (sección 7).
 - **Mocks:** ver sección 4. Sin pruebas de extremo a extremo ni de otros navegadores.
 
 ### 6.3 Exclusiones y límites
@@ -119,8 +122,16 @@ Con `npm run api` y `npm run dev` en marcha, en el navegador integrado (Chromium
 |---|---|
 | API: `GET /productos`, `GET /productos/estuche-tela`, id inexistente | Devuelve los 4 productos, el producto pedido y un 404 |
 | Páginas `/`, `/productos`, `/pedido?producto=estuche-tela` | Cargan; Productos muestra los datos de la API; Pedido trae Estuche de Tela elegido |
-| Página `/admin` | Muestra 4 productos, precio promedio $6.245, más caro Estuche de Tela, más barato Set de Destacadores, una tarjeta por categoría y la tabla de 4 filas; con la API apagada muestra el aviso; a 360 px la página no se desborda (la tabla se desplaza dentro de su caja) | Abre `/pedido?producto=set-destacadores` con ese producto elegido |
-| Anchos 360, 768 y 1440 px en las tres rutas | Sin desplazamiento horizontal; las imágenes cargan |
+| Clic en «Pedir» del Set de Destacadores | Abre `/pedido?producto=set-destacadores` con ese producto elegido |
+| `/admin` sin sesión | Responde 307 a `/admin/login`; la respuesta no contiene datos del panel |
+| `/admin` con una cookie `sesion_admin` falsificada | Responde 307 a `/admin/login`; no entra |
+| Login con `admin` y clave incorrecta (`9999`) | Vuelve a `/admin/login?error=1` con «Usuario o contraseña incorrectos.»; no se crea cookie |
+| Login con `admin` y `1234` | Abre `/admin` (4 tarjetas, tabla de 4 filas). La cookie es `httpOnly`: el JavaScript de la página no la ve |
+| «Cerrar sesión» y volver a abrir `/admin` | Vuelve a `/admin/login` |
+| Panel `/admin` con la API apagada (con sesión iniciada) | Muestra el aviso «No se pudieron cargar los productos» (comprobado antes de agregar el login) |
+| Panel a 360 px | La página no se desborda; la tabla se desplaza dentro de su caja |
+| Enlace de entrada | Está en el pie de página («Administración»); el menú principal no lo tiene |
+| Anchos 360, 768 y 1440 px en `/`, `/productos` y `/pedido` | Sin desplazamiento horizontal; las imágenes cargan |
 | Formulario vacío al enviar | Errores de nombre y correo y aviso «Revisa los campos marcados.» (el producto venía elegido) |
 | Cantidad 2.5 | Rechazada con «La cantidad debe ser un número entero entre 1 y 10.» |
 | Pedido válido (3 × Estuche de Tela) | Total $22.500 y aviso de demostración |
