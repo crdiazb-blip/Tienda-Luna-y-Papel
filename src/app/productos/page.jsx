@@ -1,7 +1,10 @@
-import ListaProductos from "../components/ListaProductos";
-import { productos } from "../data/productos";
+import ListaProductos from "../../components/ListaProductos";
+import Mensaje from "../../components/Mensaje";
+import { obtenerProductos } from "../../utils/api";
 
-function Productos() {
+export default async function Productos() {
+  const productos = await obtenerProductos();
+
   return (
     <>
       <section className="titulo">
@@ -11,7 +14,13 @@ function Productos() {
       </section>
 
       <section className="py-4 py-md-5 px-3 px-md-4">
-        <ListaProductos productos={productos} />
+        {productos.length > 0 ? (
+          <ListaProductos productos={productos} />
+        ) : (
+          <Mensaje tipo="error">
+            No se pudieron cargar los productos. Inicia la API con npm run api en otra terminal.
+          </Mensaje>
+        )}
       </section>
 
       <section className="detalle mb-4">
@@ -35,5 +44,3 @@ function Productos() {
     </>
   );
 }
-
-export default Productos;

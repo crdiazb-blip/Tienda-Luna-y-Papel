@@ -1,7 +1,7 @@
-import { buscarProducto } from "../data/productos";
+import { buscarProducto } from "./productos";
 
-export function calcularTotal(idProducto, cantidad) {
-  const producto = buscarProducto(idProducto);
+export function calcularTotal(productos, idProducto, cantidad) {
+  const producto = buscarProducto(productos, idProducto);
   if (!producto) {
     return null;
   }

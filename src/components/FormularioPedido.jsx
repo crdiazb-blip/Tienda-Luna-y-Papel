@@ -1,9 +1,11 @@
+"use client";
+
 import { useState } from "react";
 import Boton from "./Boton";
 import Mensaje from "./Mensaje";
 import { validarPedido } from "../utils/validacionesPedido";
 import { calcularTotal, formatearPesos } from "../utils/calcularTotal";
-import { buscarProducto } from "../data/productos";
+import { buscarProducto } from "../utils/productos";
 
 const datosVacios = {
   nombre: "",
@@ -18,7 +20,7 @@ function FormularioPedido({ productos, productoInicial = "" }) {
   const [intentoEnvio, setIntentoEnvio] = useState(false);
   const [resultado, setResultado] = useState(null);
 
-  const errores = intentoEnvio ? validarPedido(datos) : {};
+  const errores = intentoEnvio ? validarPedido(datos, productos) : {};
   const hayErrores = Object.keys(errores).length > 0;
 
   function cambiarCampo(evento) {
@@ -30,16 +32,16 @@ function FormularioPedido({ productos, productoInicial = "" }) {
   function enviar(evento) {
     evento.preventDefault();
     setIntentoEnvio(true);
-    const erroresActuales = validarPedido(datos);
+    const erroresActuales = validarPedido(datos, productos);
     if (Object.keys(erroresActuales).length > 0) {
       setResultado(null);
       return;
     }
-    const producto = buscarProducto(datos.producto);
+    const producto = buscarProducto(productos, datos.producto);
     setResultado({
       nombreProducto: producto.nombre,
       cantidad: Number(datos.cantidad),
-      total: calcularTotal(datos.producto, datos.cantidad),
+      total: calcularTotal(productos, datos.producto, datos.cantidad),
     });
   }
 

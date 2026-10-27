@@ -1,14 +1,16 @@
+"use client";
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Menu from "./Menu";
 
-function Encabezado() {
+function Encabezado({ rutaActual }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   return (
     <header className="encabezado">
       <nav className="navbar navbar-expand-md container-lg" aria-label="Navegación principal">
-        <Link className="navbar-brand marca" to="/" onClick={() => setMenuAbierto(false)}>
+        <Link className="navbar-brand marca" href="/" onClick={() => setMenuAbierto(false)}>
           Luna y Papel
         </Link>
         <button
@@ -22,7 +24,7 @@ function Encabezado() {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div id="menu-principal" className={menuAbierto ? "collapse navbar-collapse show" : "collapse navbar-collapse"}>
-          <Menu alElegir={() => setMenuAbierto(false)} />
+          <Menu rutaActual={rutaActual} alElegir={() => setMenuAbierto(false)} />
         </div>
       </nav>
     </header>

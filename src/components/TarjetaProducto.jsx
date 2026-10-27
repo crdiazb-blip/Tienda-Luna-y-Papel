@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { formatearPesos } from "../utils/calcularTotal";
 
 function TarjetaProducto({ id, nombre, categoria, descripcion, precio }) {
@@ -9,7 +9,7 @@ function TarjetaProducto({ id, nombre, categoria, descripcion, precio }) {
         <h2 className="h4 card-title">{nombre}</h2>
         <p className="card-text">{descripcion}</p>
         <p className="precio mt-auto">{formatearPesos(precio)}</p>
-        <Link className="btn btn-luna align-self-start" to={`/pedido?producto=${id}`}>
+        <Link className="btn btn-luna align-self-start" href={`/pedido?producto=${id}`}>
           Pedir
         </Link>
       </div>

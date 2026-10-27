@@ -1,4 +1,4 @@
-import { buscarProducto } from "../data/productos";
+import { buscarProducto } from "./productos";
 
 export function validarNombre(nombre) {
   if (nombre.trim().length < 3) {
@@ -15,11 +15,11 @@ export function validarCorreo(correo) {
   return "";
 }
 
-export function validarProducto(idProducto) {
+export function validarProducto(productos, idProducto) {
   if (idProducto === "") {
     return "Selecciona un producto.";
   }
-  if (!buscarProducto(idProducto)) {
+  if (!buscarProducto(productos, idProducto)) {
     return "El producto elegido no está en el catálogo.";
   }
   return "";
@@ -37,11 +37,11 @@ export function validarCantidad(cantidad) {
   return "";
 }
 
-export function validarPedido(datos) {
+export function validarPedido(datos, productos) {
   const errores = {
     nombre: validarNombre(datos.nombre),
     correo: validarCorreo(datos.correo),
-    producto: validarProducto(datos.producto),
+    producto: validarProducto(productos, datos.producto),
     cantidad: validarCantidad(datos.cantidad),
   };
   Object.keys(errores).forEach((campo) => {

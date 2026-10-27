@@ -2,41 +2,30 @@
   "name": "luna-y-papel",
   "private": true,
   "version": "1.0.0",
-  "description": "Papeleria Luna y Papel: frontend academico con React y Bootstrap (DSY1104, Evaluacion Parcial 2)",
+  "description": "Papeleria Luna y Papel: tienda con Next.js, Bootstrap, API local y pruebas QUnit (DSY1104)",
   "type": "module",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "karma start karma.conf.cjs --single-run",
-    "test:watch": "karma start karma.conf.cjs"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "api": "node api/servidor.js",
+    "test:web": "node tests/servidor.js"
   },
   "dependencies": {
     "bootstrap": "^5.3.8",
+    "next": "^16.4.3",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "react-router-dom": "^7.18.4"
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@babel/core": "^8.0.9",
-    "@babel/preset-env": "^8.0.7",
-    "@babel/preset-react": "^8.0.1",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
-    "@vitejs/plugin-react": "^6.1.2",
-    "babel-loader": "^10.1.1",
     "babel-plugin-istanbul": "^8.0.0",
-    "jasmine-core": "^7.0.2",
-    "karma": "^6.4.4",
-    "karma-chrome-launcher": "^3.2.0",
-    "karma-coverage": "^2.2.1",
-    "karma-jasmine": "^5.1.0",
-    "karma-spec-reporter": "^0.0.37",
-    "karma-webpack": "^5.0.1",
-    "vite": "^8.3.5",
-    "webpack": "^5.112.2"
+    "esbuild": "^0.28.2",
+    "qunit": "^3.0.0"
   }
 }

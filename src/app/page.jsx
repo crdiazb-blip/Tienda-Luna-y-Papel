@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const categorias = [
   {
@@ -18,7 +18,7 @@ const categorias = [
   },
 ];
 
-function Inicio() {
+export default function Inicio() {
   return (
     <>
       <section className="presentacion">
@@ -27,7 +27,7 @@ function Inicio() {
             <p className="texto-pequeno">Papelería para estudiar y crear</p>
             <h1>Ordena tus ideas con estilo</h1>
             <p>Encuentra cuadernos, lápices y accesorios para acompañar tus proyectos.</p>
-            <Link className="btn btn-luna" to="/productos">Ver productos</Link>
+            <Link className="btn btn-luna" href="/productos">Ver productos</Link>
           </div>
           <div className="col-md-6">
             <img
@@ -48,7 +48,7 @@ function Inicio() {
                 <div className="card-body">
                   <h3 className="h5 card-title">{categoria.nombre}</h3>
                   <p className="card-text">{categoria.texto}</p>
-                  <Link to="/productos">{categoria.enlace}</Link>
+                  <Link href="/productos">{categoria.enlace}</Link>
                 </div>
               </article>
             </div>
@@ -80,5 +80,3 @@ function Inicio() {
     </>
   );
 }
-
-export default Inicio;

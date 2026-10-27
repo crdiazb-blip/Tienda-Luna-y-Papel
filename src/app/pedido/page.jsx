@@ -1,11 +1,12 @@
-import { useSearchParams } from "react-router-dom";
-import FormularioPedido from "../components/FormularioPedido";
-import { productos, buscarProducto } from "../data/productos";
+import FormularioPedido from "../../components/FormularioPedido";
+import Mensaje from "../../components/Mensaje";
+import { obtenerProductos } from "../../utils/api";
+import { buscarProducto } from "../../utils/productos";
 
-function Pedido() {
-  const [parametros] = useSearchParams();
-  const idPedido = parametros.get("producto");
-  const productoInicial = buscarProducto(idPedido) ? idPedido : "";
+export default async function Pedido({ searchParams }) {
+  const { producto } = await searchParams;
+  const productos = await obtenerProductos();
+  const productoInicial = buscarProducto(productos, producto) ? producto : "";
 
   return (
     <>
@@ -18,7 +19,13 @@ function Pedido() {
       <section className="py-4 py-md-5 px-3 px-md-4">
         <div className="row g-4">
           <div className="col-lg-8">
-            <FormularioPedido productos={productos} productoInicial={productoInicial} />
+            {productos.length > 0 ? (
+              <FormularioPedido productos={productos} productoInicial={productoInicial} />
+            ) : (
+              <Mensaje tipo="error">
+                No se pudieron cargar los productos. Inicia la API con npm run api en otra terminal.
+              </Mensaje>
+            )}
           </div>
           <div className="col-lg-4">
             <aside className="resumen">
@@ -36,5 +43,3 @@ function Pedido() {
     </>
   );
 }
-
-export default Pedido;
