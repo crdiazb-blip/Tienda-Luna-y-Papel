@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import FormularioPedido from "../src/components/FormularioPedido";
-import { productos } from "../src/data/productos";
+import productos from "../api/productos.json";
 
 function escribir(etiqueta, valor) {
   fireEvent.change(screen.getByLabelText(etiqueta), { target: { value: valor } });
@@ -18,69 +18,70 @@ function pulsarCalcular() {
   fireEvent.click(screen.getByRole("button", { name: "Calcular total" }));
 }
 
-describe("Formulario de pedido (estado, validación y resultado)", () => {
-  beforeEach(() => {
+QUnit.module("Formulario de pedido (estado, validación y resultado)", (hooks) => {
+  hooks.beforeEach(() => {
     render(<FormularioPedido productos={productos} />);
   });
+  hooks.afterEach(cleanup);
 
-  it("5. un campo controlado cambia su valor al escribir y no muestra errores antes de enviar", () => {
+  QUnit.test("5. un campo controlado cambia su valor al escribir y no muestra errores antes de enviar", (assert) => {
     const campoNombre = screen.getByLabelText("Nombre completo");
-    expect(campoNombre.value).toBe("");
+    assert.equal(campoNombre.value, "");
 
     escribir("Nombre completo", "Sofía Rojas");
 
-    expect(campoNombre.value).toBe("Sofía Rojas");
-    expect(screen.queryByText("Revisa los campos marcados.")).toBeNull();
+    assert.equal(campoNombre.value, "Sofía Rojas");
+    assert.equal(screen.queryByText("Revisa los campos marcados."), null);
   });
 
-  it("6. un formulario inválido muestra errores, no muestra total y el error se quita al corregir", () => {
+  QUnit.test("6. un formulario inválido muestra errores, no muestra total y el error se quita al corregir", (assert) => {
     pulsarCalcular();
 
-    expect(screen.getByText("Escribe tu nombre completo (mínimo 3 letras).")).toBeTruthy();
-    expect(screen.getByText("Escribe un correo válido, por ejemplo nombre@correo.cl.")).toBeTruthy();
-    expect(screen.getByText("Selecciona un producto.")).toBeTruthy();
-    expect(screen.getByText("Revisa los campos marcados.")).toBeTruthy();
-    expect(screen.getByLabelText("Nombre completo").getAttribute("aria-invalid")).toBe("true");
-    expect(screen.queryByText(/Cálculo de demostración/)).toBeNull();
+    assert.ok(screen.getByText("Escribe tu nombre completo (mínimo 3 letras)."));
+    assert.ok(screen.getByText("Escribe un correo válido, por ejemplo nombre@correo.cl."));
+    assert.ok(screen.getByText("Selecciona un producto."));
+    assert.ok(screen.getByText("Revisa los campos marcados."));
+    assert.equal(screen.getByLabelText("Nombre completo").getAttribute("aria-invalid"), "true");
+    assert.equal(screen.queryByText(/Cálculo de demostración/), null);
 
     escribir("Nombre completo", "Sofía Rojas");
-    expect(screen.queryByText("Escribe tu nombre completo (mínimo 3 letras).")).toBeNull();
-    expect(screen.getByText("Selecciona un producto.")).toBeTruthy();
+    assert.equal(screen.queryByText("Escribe tu nombre completo (mínimo 3 letras)."), null);
+    assert.ok(screen.getByText("Selecciona un producto."));
   });
 
-  it("9. un formulario válido muestra el total correcto y el mensaje de demostración", () => {
+  QUnit.test("9. un formulario válido muestra el total correcto y el mensaje de demostración", (assert) => {
     llenarDatosCorrectos();
     pulsarCalcular();
 
     const resultado = screen.getByText(/Cálculo de demostración/);
-    expect(resultado.textContent).toContain("2 × Cuaderno Punteado");
-    expect(resultado.textContent).toContain("Total: $13.980");
-    expect(resultado.textContent).toContain("no se realizó ningún cobro");
-    expect(screen.queryByText("Revisa los campos marcados.")).toBeNull();
+    assert.ok(resultado.textContent.includes("2 × Cuaderno Punteado"));
+    assert.ok(resultado.textContent.includes("Total: $13.980"));
+    assert.ok(resultado.textContent.includes("no se realizó ningún cobro"));
+    assert.equal(screen.queryByText("Revisa los campos marcados."), null);
   });
 
-  it("10. «Limpiar» restablece campos, cantidad, errores y resultado", () => {
-    const verificarFormularioEnBlanco = () => {
-      expect(screen.getByLabelText("Nombre completo").value).toBe("");
-      expect(screen.getByLabelText("Correo electrónico").value).toBe("");
-      expect(screen.getByLabelText("Producto").value).toBe("");
-      expect(screen.getByLabelText(/Cantidad/).value).toBe("1");
-      expect(screen.getByLabelText("Comentario opcional").value).toBe("");
-      expect(screen.queryByText(/Cálculo de demostración/)).toBeNull();
-      expect(screen.queryByText("Revisa los campos marcados.")).toBeNull();
-    };
+  QUnit.test("10. «Limpiar» restablece campos, cantidad, errores y resultado", (assert) => {
+    function verificarFormularioEnBlanco() {
+      assert.equal(screen.getByLabelText("Nombre completo").value, "");
+      assert.equal(screen.getByLabelText("Correo electrónico").value, "");
+      assert.equal(screen.getByLabelText("Producto").value, "");
+      assert.equal(screen.getByLabelText(/Cantidad/).value, "1");
+      assert.equal(screen.getByLabelText("Comentario opcional").value, "");
+      assert.equal(screen.queryByText(/Cálculo de demostración/), null);
+      assert.equal(screen.queryByText("Revisa los campos marcados."), null);
+    }
 
     llenarDatosCorrectos();
     pulsarCalcular();
-    expect(screen.getByText(/Cálculo de demostración/)).toBeTruthy();
+    assert.ok(screen.getByText(/Cálculo de demostración/));
     fireEvent.click(screen.getByRole("button", { name: "Limpiar" }));
     verificarFormularioEnBlanco();
 
     escribir("Nombre completo", "Ana");
     pulsarCalcular();
-    expect(screen.getByText("Selecciona un producto.")).toBeTruthy();
+    assert.ok(screen.getByText("Selecciona un producto."));
     fireEvent.click(screen.getByRole("button", { name: "Limpiar" }));
     verificarFormularioEnBlanco();
-    expect(screen.queryByText("Selecciona un producto.")).toBeNull();
+    assert.equal(screen.queryByText("Selecciona un producto."), null);
   });
 });

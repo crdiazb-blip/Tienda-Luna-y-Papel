@@ -1,0 +1,31 @@
+﻿Ejecucion de las pruebas: npm run test:web  ->  http://localhost:3002 (navegador integrado, Chromium)
+
+QUnit: 10 tests completed in 0.3 seconds. 10 passed, 0 skipped, 0 failed, and 0 todo.
+
+Pruebas (en el orden en que QUnit las ejecutó):
+ pass | 3. el boton del encabezado abre y cierra el menu
+ pass | 4. el menu marca como activo el enlace de la ruta actual
+ pass | 5. un campo controlado cambia su valor al escribir y no muestra errores antes de enviar
+ pass | 6. un formulario invalido muestra errores, no muestra total y el error se quita al corregir
+ pass | 9. un formulario valido muestra el total correcto y el mensaje de demostracion
+ pass | 10. Limpiar restablece campos, cantidad, errores y resultado
+ pass | 1. la lista muestra los cuatro productos con sus precios
+ pass | 2. una tarjeta muestra los datos que recibe por propiedades
+ pass | 7. la cantidad acepta enteros de 1 a 10 y rechaza fuera de rango, decimales y no numericos
+ pass | 8. el total es precio del catalogo x cantidad y se formatea en pesos chilenos
+
+Cobertura (tabla que muestra la misma pagina):
+Archivo                               Sent %   Ram %  Func %
+components/Boton.jsx                  100.00  100.00  100.00   lineas sin ejecutar: -
+components/Encabezado.jsx              60.00  100.00   50.00   lineas sin ejecutar: 13, 27
+components/FormularioPedido.jsx       100.00   92.11  100.00   lineas sin ejecutar: -
+components/ListaProductos.jsx         100.00  100.00  100.00   lineas sin ejecutar: -
+components/Mensaje.jsx                100.00  100.00  100.00   lineas sin ejecutar: -
+components/Menu.jsx                   100.00  100.00  100.00   lineas sin ejecutar: -
+components/PiePagina.jsx                0.00  100.00    0.00   lineas sin ejecutar: 2
+components/TarjetaProducto.jsx        100.00  100.00  100.00   lineas sin ejecutar: -
+utils/calcularTotal.js                100.00  100.00  100.00   lineas sin ejecutar: -
+utils/productos.js                    100.00  100.00  100.00   lineas sin ejecutar: -
+utils/validacionesPedido.js            95.83   93.75  100.00   lineas sin ejecutar: 23
+TOTAL                                  94.52   93.94   89.29
+Sentencias 69/73 | Ramas 62/66 | Funciones 25/28

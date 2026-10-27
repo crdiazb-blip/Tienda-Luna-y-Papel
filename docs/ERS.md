@@ -2,39 +2,46 @@
 
 **Proyecto:** Luna y Papel, frontend de una papelería
 **Asignatura:** DSY1104 Desarrollo Fullstack II, Evaluación Parcial N.º 2
-**Versión:** 2.0 (actualiza la versión 1.0 de septiembre de 2026)
+**Versión:** 3.0 (actualiza la 2.0; la 1.0 describía el sitio HTML/CSS/JS)
 **Fecha:** octubre de 2026
 **Integrantes del equipo:** _(completar con los nombres reales; este documento no los inventa)_
 
 ## 0. Origen de este documento
 
-- La versión 1.0 existía como `ERS_Luna_y_Papel.md` (septiembre de 2026), describía el sitio HTML/CSS/JS. Esta versión 2.0 la toma como base.
-- Se revisó cada requisito de la 1.0 contra el sitio real (`prototipo-html/`) y contra la aplicación React. Las diferencias detectadas se listan en la sección 9.
-- La pauta de la evaluación pide entregar el ERS "añadiendo la propuesta personalizada, última versión". La propuesta personalizada de Luna y Papel está en la sección 8.
+- La versión 1.0 existía como `ERS_Luna_y_Papel.md` (septiembre de 2026) y describía el sitio HTML/CSS/JS. Esta versión la toma como base y la contrasta con el proyecto real.
+- La versión 2.0 describía una aplicación React con Vite y pruebas Jasmine/Karma. Esta versión 3.0 refleja el cambio decidido por el equipo a **Next.js, QUnit y una API local simulada**.
+- La pauta pide entregar el ERS "añadiendo la propuesta personalizada, última versión". La propuesta está en la sección 8.
 
 ## 1. Propósito y alcance
 
-Este documento define lo que hace la aplicación web de Luna y Papel después de migrarla a React y Bootstrap, y cómo se comprueba.
+Define lo que hace la aplicación web de Luna y Papel y cómo se comprueba.
 
-**Dentro del alcance:** mostrar la tienda, mostrar un catálogo de cuatro productos y permitir completar un formulario de pedido con validaciones y cálculo del total.
+**Dentro del alcance:** mostrar la tienda, mostrar un catálogo de cuatro productos entregado por una API local simulada y permitir completar un formulario de pedido con validaciones y cálculo del total.
 
-**Fuera del alcance:** cobros, pasarelas de pago, envío de correos, guardado de pedidos, cuentas de usuario, administración de productos, carrito de compras, API o backend.
+**Fuera del alcance:** cobros, pasarelas de pago, envío de correos, guardado de pedidos, cuentas de usuario, administración de productos, carrito de compras, base de datos.
 
-**Diferencia con el enunciado de la pauta.** La introducción de la pauta dice que se entregará una plantilla de tienda con un carrito de compras ya implementado. Luna y Papel **no tiene carrito**: tiene un formulario de pedido de un producto y una cantidad. Los criterios de evaluación de la pauta (React, propiedades y estados, Bootstrap, pruebas con Jasmine y Karma, proceso de testeo) no dependen del carrito, y no se agregó uno por suposición.
+**Diferencia con la pauta.** Su introducción habla de una plantilla con carrito de compras. Luna y Papel **no tiene carrito**: tiene un formulario de un producto y una cantidad, y no se agregó uno por suposición. La pauta nombra Jasmine y Karma; este proyecto usa **QUnit** (decisión del equipo).
 
 ## 2. Descripción general
 
 | Sección | Ruta | Propósito |
 |---|---|---|
 | Inicio | `/` | Presentación, tres categorías informativas, video de lettering y datos de envío/retiro |
-| Productos | `/productos` | Catálogo de cuatro productos con botón «Pedir» |
+| Productos | `/productos` | Catálogo de cuatro productos (desde la API) con botón «Pedir» |
 | Pedido | `/pedido` | Formulario con validación, total en pesos chilenos y datos de retiro |
 
-Usuario: **cliente** que explora la tienda y calcula un pedido. (La versión 1.0 mencionaba un "administrador (futuro)"; no existe en esta versión.)
+Usuario: **cliente** que explora la tienda y calcula un pedido.
+
+**API simulada** (`npm run api`, `http://localhost:3001`):
+
+| Petición | Respuesta |
+|---|---|
+| `GET /productos` | Arreglo con los 4 productos |
+| `GET /productos/<id>` | Un producto, o 404 si no existe |
+
+Los datos están en `api/productos.json`. La API no guarda nada ni recibe pedidos.
 
 ## 3. Catálogo
-
-El catálogo está en `src/data/productos.js` y lo usan Productos y Pedido.
 
 | Id | Producto | Categoría | Descripción | Precio |
 |---|---|---|---|---|
@@ -45,78 +52,81 @@ El catálogo está en `src/data/productos.js` y lo usan Productos y Pedido.
 
 ## 4. Requisitos funcionales
 
-Estado: **Implementado** significa que existe en el código y fue comprobado (prueba automática y/o revisión manual en el navegador, ver `docs/TESTING.md`).
+**Implementado** significa que existe en el código y se comprobó (prueba automática y/o revisión manual; ver `docs/TESTING.md`).
 
 | Id | Requisito | Implementado en | Estado |
 |---|---|---|---|
-| RF-01 | Navegación principal con enlaces a Inicio, Productos y Pedido, enlace de la página actual resaltado y marca que lleva al inicio | `components/Encabezado.jsx`, `Menu.jsx` | Implementado (prueba 4; menú móvil solo revisado a mano) |
-| RF-02 | Inicio: presentación, botón «Ver productos», imagen, tres categorías informativas con enlace a Productos, video de lettering y aviso de envíos/retiro | `pages/Inicio.jsx` | Implementado (revisión manual; prueba parcial en la 4) |
-| RF-03 | Productos: mostrar los cuatro productos con categoría, nombre, descripción y precio, mediante componentes y `map` | `ListaProductos.jsx`, `TarjetaProducto.jsx` | Implementado (pruebas 1 y 2) |
-| RF-04 | Cada botón «Pedir» abre el formulario con ese producto ya elegido | `TarjetaProducto.jsx`, `pages/Pedido.jsx` | Implementado (prueba 3) |
-| RF-05 | Formulario con campos controlados: nombre, correo, producto, cantidad (parte en 1) y comentario opcional | `FormularioPedido.jsx` | Implementado (prueba 5) |
-| RF-06 | Validar nombre: obligatorio, mínimo 3 caracteres sin contar espacios de los extremos | `utils/validacionesPedido.js` | Implementado (prueba 6) |
-| RF-07 | Validar correo: obligatorio, formato básico `algo@algo.algo` sin espacios | `utils/validacionesPedido.js` | Implementado (prueba 6) |
-| RF-08 | Validar producto: obligatorio y perteneciente al catálogo | `utils/validacionesPedido.js` | Implementado (prueba 6; la rama "no está en el catálogo" no tiene prueba) |
-| RF-09 | Validar cantidad: número entero entre 1 y 10 (rechaza decimales, negativos, vacío y letras) | `utils/validacionesPedido.js` | Implementado (prueba 7) |
-| RF-10 | Mostrar los errores junto a cada campo solo después del primer intento de envío; actualizarlos o quitarlos al corregir los datos | `FormularioPedido.jsx` | Implementado (prueba 6; revisión manual) |
-| RF-11 | Calcular el total = precio del catálogo (buscado por id) × cantidad, y mostrarlo en pesos chilenos (ej. $13.980) | `utils/calcularTotal.js` | Implementado (pruebas 8 y 9) |
-| RF-12 | Con datos válidos, mostrar el total y un mensaje que aclare que es una demostración: no hay cobro, correo ni guardado | `FormularioPedido.jsx` | Implementado (prueba 9) |
-| RF-13 | El botón «Limpiar» restablece nombre, correo, producto, comentario, errores y resultado; la cantidad vuelve a 1 | `FormularioPedido.jsx` | Implementado (prueba 10) |
-| RF-14 | Mostrar datos de retiro (Avenida Irarrázaval 1800, Ñuñoa; lunes a sábado, 10:00 a 18:00) y la nota de proyecto académico | `pages/Pedido.jsx` | Implementado (revisión manual) |
-| RF-15 | Los resultados y errores generales se anuncian con `aria-live="polite"` | `FormularioPedido.jsx` | Implementado (revisión del código; no probado con lector de pantalla) |
+| RF-01 | Navegación con enlaces a Inicio, Productos y Pedido, enlace de la página actual resaltado y marca que lleva al inicio; menú que se abre y cierra en móvil | `components/Encabezado.jsx`, `EncabezadoConRuta.jsx`, `Menu.jsx` | Implementado (pruebas 3 y 4) |
+| RF-02 | Inicio: presentación, botón «Ver productos», imagen, tres categorías informativas con enlace a Productos, video de lettering y aviso de envíos/retiro | `app/page.jsx` | Implementado (revisión manual) |
+| RF-03 | Productos: mostrar los cuatro productos con categoría, nombre, descripción y precio, mediante componentes y `map` | `app/productos/page.jsx`, `ListaProductos.jsx`, `TarjetaProducto.jsx` | Implementado (pruebas 1 y 2) |
+| RF-04 | Cada botón «Pedir» abre el formulario con ese producto ya elegido | `TarjetaProducto.jsx`, `app/pedido/page.jsx` | Implementado (prueba 2 el enlace; clic revisado a mano) |
+| RF-05 | Catálogo obtenido de la API local; si no responde, se muestra un aviso | `utils/api.js`, `api/servidor.js` | Implementado (revisión manual; sin prueba automática) |
+| RF-06 | Formulario con campos controlados: nombre, correo, producto, cantidad (parte en 1) y comentario opcional | `FormularioPedido.jsx` | Implementado (prueba 5) |
+| RF-07 | Validar nombre: obligatorio, mínimo 3 caracteres sin contar espacios de los extremos | `utils/validacionesPedido.js` | Implementado (prueba 6) |
+| RF-08 | Validar correo: obligatorio, formato básico `algo@algo.algo` sin espacios | `utils/validacionesPedido.js` | Implementado (prueba 6) |
+| RF-09 | Validar producto: obligatorio y perteneciente al catálogo | `utils/validacionesPedido.js` | Implementado (prueba 6; la rama "no está en el catálogo" no tiene prueba) |
+| RF-10 | Validar cantidad: entero entre 1 y 10 (rechaza decimales, negativos, vacío y letras) | `utils/validacionesPedido.js` | Implementado (prueba 7) |
+| RF-11 | Mostrar los errores junto a cada campo solo después del primer intento de envío; actualizarlos o quitarlos al corregir | `FormularioPedido.jsx` | Implementado (prueba 6) |
+| RF-12 | Calcular el total = precio del catálogo (buscado por id) × cantidad, en pesos chilenos (ej. $13.980) | `utils/calcularTotal.js` | Implementado (pruebas 8 y 9) |
+| RF-13 | Con datos válidos, mostrar el total y un mensaje de demostración: no hay cobro, correo ni guardado | `FormularioPedido.jsx` | Implementado (prueba 9) |
+| RF-14 | «Limpiar» restablece nombre, correo, producto, comentario, errores y resultado; la cantidad vuelve a 1 | `FormularioPedido.jsx` | Implementado (prueba 10) |
+| RF-15 | Mostrar datos de retiro (Avenida Irarrázaval 1800, Ñuñoa; lunes a sábado, 10:00 a 18:00) y la nota de proyecto académico | `app/pedido/page.jsx` | Implementado (revisión manual) |
+| RF-16 | Resultados y errores generales se anuncian con `aria-live="polite"` | `FormularioPedido.jsx` | Implementado (revisión del código; no probado con lector de pantalla) |
 
 ## 5. Requisitos no funcionales
 
 | Id | Requisito | Estado |
 |---|---|---|
-| RNF-01 | **Responsividad con Bootstrap** en móvil, tablet y escritorio, sin desplazamiento horizontal | Revisado en el navegador a 360, 768 y 1440 px de ancho: ninguna ruta se desborda (ancho de contenido ≤ ancho de ventana) y las imágenes se cargan. No se probó en dispositivos físicos ni en otros navegadores. |
-| RNF-02 | Etiquetas asociadas a cada campo; foco visible; mensajes de error comprensibles | Implementado (etiquetas con `htmlFor`, regla `:focus-visible`, `aria-invalid` y `aria-describedby`). |
-| RNF-03 | Identidad visual: fondo claro, verde oliva, dorado, tipografía sencilla (Arial) e imágenes originales | Implementado en `src/styles/estilos.css`, cargado después de Bootstrap. |
-| RNF-04 | Tamaño mínimo de elementos pulsables de 44 px | Definido en CSS para botones y enlaces del menú. No medido con una herramienta. |
-| RNF-05 | Contraste de color adecuado (WCAG 2.1 AA) | **No verificado** con herramienta. Se usan los mismos colores del sitio original. |
-| RNF-06 | Mantenibilidad: componentes pequeños, nombres en español, sin comentarios en el código, catálogo y reglas de validación en archivos propios | Implementado. |
-| RNF-07 | Datos personales: no se almacenan ni se envían; no hay cookies propias | Implementado (todo ocurre en la memoria de la página). El video de YouTube incrustado puede aplicar sus propias políticas. |
-| RNF-08 | Rendimiento | Compilación de producción (`npm run build`): JS 270,74 kB (86,03 kB comprimido), CSS 232,53 kB (31,61 kB comprimido), más dos imágenes de ~84 kB y ~107 kB. Sin medición de tiempo de carga. |
-| RNF-09 | Compatibilidad | Se ejecutó solo en Chrome (156 en las pruebas). La versión 1.0 mencionaba Firefox, Safari y Edge; no se probaron. |
+| RNF-01 | **Responsividad con Bootstrap** en móvil, tablet y escritorio, sin desplazamiento horizontal | Revisado en el navegador a 360, 768 y 1440 px: ninguna ruta se desborda y las imágenes cargan. No probado en dispositivos físicos ni otros navegadores. |
+| RNF-02 | Etiquetas asociadas a cada campo; foco visible; mensajes de error comprensibles | Implementado (`htmlFor`, `:focus-visible`, `aria-invalid`, `aria-describedby`). |
+| RNF-03 | Identidad visual: fondo claro, verde oliva, dorado, tipografía Arial e imágenes originales | Implementado en `app/estilos.css`, cargado después de Bootstrap. |
+| RNF-04 | Elementos pulsables de al menos 44 px | Definido en CSS para botones y enlaces del menú; no medido con herramienta. |
+| RNF-05 | Contraste de color WCAG 2.1 AA | **No verificado** con herramienta. Se usan los colores del sitio original. |
+| RNF-06 | Mantenibilidad: componentes pequeños, nombres en español, sin comentarios en el código, datos en un solo archivo (`api/productos.json`) | Implementado. |
+| RNF-07 | Datos personales: no se almacenan ni se envían | Implementado. El video de YouTube incrustado puede aplicar sus propias políticas. |
+| RNF-08 | Disponibilidad de datos: si la API está apagada, la tienda sigue funcionando y avisa | Implementado (Productos y Pedido muestran el aviso). |
+| RNF-09 | Compatibilidad | Probado solo en Chromium. La versión 1.0 mencionaba Firefox, Safari y Edge; no se probaron. |
 
 ## 6. Tecnologías y restricciones
 
-- React 19, React Router 7, Bootstrap 5.3 (solo CSS, sin JavaScript de Bootstrap), Vite 8. JavaScript con archivos `.jsx`.
-- Pruebas: Jasmine 7, Karma 6, Chrome sin ventana, webpack + Babel (solo para las pruebas), Testing Library. Cobertura: karma-coverage con babel-plugin-istanbul.
+- **Next.js 16** (App Router) con **React 19** y archivos `.jsx`; **Bootstrap 5.3** (solo CSS).
+- **API local** en Node sin librerías (`api/servidor.js`), puerto 3001.
+- **QUnit 3** para las pruebas, servidas por `npm run test:web` (puerto 3002) y vistas en el navegador. Apoyo: esbuild, Testing Library, babel-plugin-istanbul.
 - Node.js 20 o superior.
-- **Restricciones:** sin TypeScript, Redux, Context, hooks propios, backend, autenticación, pagos ni base de datos. Estado con `useState` únicamente. El catálogo es un arreglo local.
-- **Pruebas sin mocks ni espías:** restricción decidida por el equipo, ver `docs/TESTING.md`.
+- **Restricciones:** sin TypeScript, Redux, Context, hooks propios, base de datos ni autenticación. Estado con `useState`.
+- **Pruebas sin mocks ni espías:** decisión del equipo (ver `docs/TESTING.md`).
+- Comandos: `npm install`, `npm run api`, `npm run dev`, `npm run test:web`, `npm run build`.
 
 ## 7. Casos de uso
 
-1. **Explorar la tienda:** el cliente abre Inicio, lee la presentación y pulsa «Ver productos».
-2. **Pedir un producto:** en Productos pulsa «Pedir» de un artículo; el formulario abre con ese producto elegido. Completa nombre, correo y cantidad, pulsa «Calcular total» y ve el total con el aviso de demostración.
-3. **Corregir errores:** si envía con datos inválidos ve el error junto a cada campo; al corregir un campo, su error desaparece.
-4. **Limpiar:** pulsa «Limpiar» y el formulario vuelve a su estado inicial.
+1. **Explorar la tienda:** el cliente abre Inicio y pulsa «Ver productos».
+2. **Pedir un producto:** en Productos pulsa «Pedir»; el formulario abre con ese producto elegido. Completa nombre, correo y cantidad, pulsa «Calcular total» y ve el total con el aviso de demostración.
+3. **Corregir errores:** con datos inválidos ve el error junto a cada campo; al corregir un campo, su error desaparece.
+4. **Limpiar:** pulsa «Limpiar» y el formulario vuelve al estado inicial.
 
 ## 8. Propuesta personalizada de Luna y Papel
 
-Cambios respecto del sitio HTML original, para cumplir la pauta de la evaluación sin cambiar la esencia de la tienda:
+Cambios respecto del sitio HTML original:
 
-1. **Migración a React:** cada parte de la página se convirtió en un componente con propiedades (`TarjetaProducto`, `ListaProductos`, `Boton`, `Mensaje`, `FormularioPedido`) o con estado (`Encabezado` para el menú móvil; `FormularioPedido` para datos, intento de envío y resultado).
-2. **Catálogo único** con identificadores. El precio se obtiene del catálogo por id, no de un valor guardado en el formulario (en el HTML original el precio estaba en el `value` de cada opción).
-3. **Bootstrap** para la grilla, tarjetas, formulario y navegación responsiva, con el CSS propio encima para conservar los colores.
-4. **«Pedir» lleva al formulario con el producto preseleccionado** (en el original solo abría la página).
-5. **Validación más estricta que la original:** correo con formato `algo@algo.algo` (antes bastaba con contener "@" y "."), cantidad solo entera de 1 a 10 (antes aceptaba decimales) y producto debe existir en el catálogo.
-6. **Mensaje de resultado honesto:** el original decía "Pedido recibido". Ahora indica que es un cálculo de demostración y que no hay cobro, correo ni guardado. El botón «Calcular y enviar» pasó a llamarse «Calcular total» porque no envía nada.
-7. **Pruebas automáticas** con Jasmine y Karma y medición de cobertura.
+1. **Next.js con React:** cada parte de la página es un componente con propiedades (`TarjetaProducto`, `ListaProductos`, `Boton`, `Mensaje`, `FormularioPedido`) o con estado (`Encabezado`, `FormularioPedido`). Las tres páginas son rutas de Next.
+2. **API local simulada** que entrega el catálogo, con identificadores. El precio se obtiene del catálogo por id, no de un valor guardado en el formulario (en el HTML original el precio estaba en el `value` de cada opción).
+3. **Bootstrap** para grilla, tarjetas, formulario y navegación responsiva, con CSS propio encima para conservar los colores.
+4. **«Pedir» lleva al formulario con el producto preseleccionado.**
+5. **Validación más estricta que la original:** correo `algo@algo.algo` (antes bastaba con "@" y "."), cantidad solo entera de 1 a 10 (antes aceptaba decimales) y producto existente en el catálogo.
+6. **Mensaje de resultado honesto:** el original decía "Pedido recibido"; ahora indica que es un cálculo de demostración. El botón «Calcular y enviar» pasó a «Calcular total» porque no envía nada.
+7. **Pruebas automáticas con QUnit** que se ven en una página web, con tabla de cobertura.
 
-Lo que **no** se agregó, aunque podría proponerse como trabajo futuro: carrito con varios productos, persistencia de pedidos, panel de administración.
+No se agregó (trabajo futuro posible): carrito con varios productos, persistencia de pedidos, panel de administración.
 
 ## 9. Diferencias con el ERS versión 1.0
 
 | Versión 1.0 decía | Realidad verificada |
 |---|---|
-| Paleta "azul/gris" y "fondo blanco/gris claro" | El sitio usa fondo crema (cornsilk), verde oliva y dorado |
-| Planificador: "50 hojas desprendibles" | La descripción original es "50 hojas desprendibles para organizar cada semana." |
-| Estuche: "2 compartimentos" | La descripción original es "Estuche liviano con cierre y dos compartimentos." |
-| Mensaje de éxito: "Pedido recibido. Total: $…" | Reemplazado por un mensaje de demostración (ver 8.6) |
-| Stack sin dependencias, XAMPP/Apache | Reemplazado por React, Bootstrap y Vite; se ejecuta con `npm run dev` |
-| Tamaño total < 500 KB, carga < 3 s, WCAG 2.1 AA | Metas no medidas o no cumplidas tal como se formularon (ver RNF-05 y RNF-08) |
-| Usuario administrador (futuro) | Fuera del alcance de esta versión |
-| Autor "Equipo de Desarrollo Académico", estado "Completado", fecha de próxima revisión | Reemplazados por la información de este documento |
+| Paleta "azul/gris" y "fondo blanco/gris claro" | Fondo crema (cornsilk), verde oliva y dorado |
+| Planificador: "50 hojas desprendibles" | Descripción original: "50 hojas desprendibles para organizar cada semana." |
+| Estuche: "2 compartimentos" | Descripción original: "Estuche liviano con cierre y dos compartimentos." |
+| Mensaje de éxito "Pedido recibido. Total: $…" | Reemplazado por un mensaje de demostración |
+| Sitio estático, sin dependencias, XAMPP/Apache | Next.js, Bootstrap y API local; se ejecuta con `npm run dev` y `npm run api` |
+| Sin base de datos ni API | Hay una API local simulada (sin base de datos) |
+| Tamaño < 500 KB, carga < 3 s, WCAG 2.1 AA | Metas no medidas o no verificadas (ver RNF-05) |
+| Usuario administrador (futuro) | Fuera del alcance |

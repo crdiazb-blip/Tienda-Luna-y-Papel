@@ -1,27 +1,28 @@
 import { validarCantidad } from "../src/utils/validacionesPedido";
 import { calcularTotal, formatearPesos } from "../src/utils/calcularTotal";
+import productos from "../api/productos.json";
 
-describe("Lógica del pedido", () => {
-  it("7. la cantidad acepta enteros de 1 a 10 y rechaza fuera de rango, decimales y no numéricos", () => {
+QUnit.module("Lógica del pedido", () => {
+  QUnit.test("7. la cantidad acepta enteros de 1 a 10 y rechaza fuera de rango, decimales y no numéricos", (assert) => {
     const valoresCorrectos = ["1", "2", "5", "10", 3];
     const valoresIncorrectos = ["0", "11", "-1", "2.5", "", "abc"];
 
     valoresCorrectos.forEach((valor) => {
-      expect(validarCantidad(valor)).toBe("");
+      assert.equal(validarCantidad(valor), "");
     });
     valoresIncorrectos.forEach((valor) => {
-      expect(validarCantidad(valor)).toBe("La cantidad debe ser un número entero entre 1 y 10.");
+      assert.equal(validarCantidad(valor), "La cantidad debe ser un número entero entre 1 y 10.");
     });
   });
 
-  it("8. el total es precio del catálogo × cantidad y se formatea en pesos chilenos", () => {
-    const totalDosCuadernos = calcularTotal("cuaderno-punteado", 2);
-    const totalTresEstuches = calcularTotal("estuche-tela", "3");
-    const totalProductoInexistente = calcularTotal("producto-inventado", 1);
+  QUnit.test("8. el total es precio del catálogo × cantidad y se formatea en pesos chilenos", (assert) => {
+    const totalDosCuadernos = calcularTotal(productos, "cuaderno-punteado", 2);
+    const totalTresEstuches = calcularTotal(productos, "estuche-tela", "3");
+    const totalProductoInexistente = calcularTotal(productos, "producto-inventado", 1);
 
-    expect(totalDosCuadernos).toBe(13980);
-    expect(totalTresEstuches).toBe(22500);
-    expect(totalProductoInexistente).toBeNull();
-    expect(formatearPesos(13980)).toBe("$13.980");
+    assert.equal(totalDosCuadernos, 13980);
+    assert.equal(totalTresEstuches, 22500);
+    assert.strictEqual(totalProductoInexistente, null);
+    assert.equal(formatearPesos(13980), "$13.980");
   });
 });

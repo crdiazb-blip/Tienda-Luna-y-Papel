@@ -1,30 +1,26 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import App from "../src/App";
+import { render, screen, cleanup } from "@testing-library/react";
 import ListaProductos from "../src/components/ListaProductos";
 import TarjetaProducto from "../src/components/TarjetaProducto";
-import { productos } from "../src/data/productos";
+import productos from "../api/productos.json";
 
-describe("Productos (propiedades y eventos)", () => {
-  it("1. la lista muestra los cuatro productos del catálogo con sus precios", () => {
-    render(
-      <MemoryRouter>
-        <ListaProductos productos={productos} />
-      </MemoryRouter>
-    );
+QUnit.module("Productos (propiedades)", (hooks) => {
+  hooks.afterEach(cleanup);
 
-    expect(screen.getAllByRole("article").length).toBe(4);
-    expect(screen.getByRole("heading", { name: "Cuaderno Punteado" })).toBeTruthy();
-    expect(screen.getByRole("heading", { name: "Set de Destacadores" })).toBeTruthy();
-    expect(screen.getByRole("heading", { name: "Planificador Semanal" })).toBeTruthy();
-    expect(screen.getByRole("heading", { name: "Estuche de Tela" })).toBeTruthy();
-    expect(screen.getByText("$6.990")).toBeTruthy();
-    expect(screen.getByText("$4.500")).toBeTruthy();
-    expect(screen.getByText("$5.990")).toBeTruthy();
-    expect(screen.getByText("$7.500")).toBeTruthy();
+  QUnit.test("1. la lista muestra los cuatro productos con sus precios", (assert) => {
+    render(<ListaProductos productos={productos} />);
+
+    assert.equal(screen.getAllByRole("article").length, 4);
+    assert.ok(screen.getByRole("heading", { name: "Cuaderno Punteado" }));
+    assert.ok(screen.getByRole("heading", { name: "Set de Destacadores" }));
+    assert.ok(screen.getByRole("heading", { name: "Planificador Semanal" }));
+    assert.ok(screen.getByRole("heading", { name: "Estuche de Tela" }));
+    assert.ok(screen.getByText("$6.990"));
+    assert.ok(screen.getByText("$4.500"));
+    assert.ok(screen.getByText("$5.990"));
+    assert.ok(screen.getByText("$7.500"));
   });
 
-  it("2. una tarjeta muestra los datos que recibe por propiedades", () => {
+  QUnit.test("2. una tarjeta muestra los datos que recibe por propiedades", (assert) => {
     const propsDePrueba = {
       id: "lapiz-de-prueba",
       nombre: "Lápiz de Prueba",
@@ -33,33 +29,12 @@ describe("Productos (propiedades y eventos)", () => {
       precio: 1234,
     };
 
-    render(
-      <MemoryRouter>
-        <TarjetaProducto {...propsDePrueba} />
-      </MemoryRouter>
-    );
+    render(<TarjetaProducto {...propsDePrueba} />);
 
-    expect(screen.getByRole("heading", { name: "Lápiz de Prueba" })).toBeTruthy();
-    expect(screen.getByText("ESCRITURA")).toBeTruthy();
-    expect(screen.getByText("Descripción escrita solo para esta prueba.")).toBeTruthy();
-    expect(screen.getByText("$1.234")).toBeTruthy();
-    expect(screen.getByRole("link", { name: "Pedir" }).getAttribute("href")).toBe(
-      "/pedido?producto=lapiz-de-prueba"
-    );
-  });
-
-  it("3. pulsar «Pedir» en Productos abre el formulario con ese producto elegido", () => {
-    render(
-      <MemoryRouter initialEntries={["/productos"]}>
-        <App />
-      </MemoryRouter>
-    );
-    expect(screen.getByRole("heading", { name: "Productos disponibles" })).toBeTruthy();
-
-    const botonesPedir = screen.getAllByRole("link", { name: "Pedir" });
-    fireEvent.click(botonesPedir[1]);
-
-    expect(screen.getByRole("heading", { name: "Solicita tu pedido" })).toBeTruthy();
-    expect(screen.getByLabelText("Producto").value).toBe("set-destacadores");
+    assert.ok(screen.getByRole("heading", { name: "Lápiz de Prueba" }));
+    assert.ok(screen.getByText("ESCRITURA"));
+    assert.ok(screen.getByText("Descripción escrita solo para esta prueba."));
+    assert.ok(screen.getByText("$1.234"));
+    assert.equal(screen.getByRole("link", { name: "Pedir" }).getAttribute("href"), "/pedido?producto=lapiz-de-prueba");
   });
 });

@@ -1,73 +1,71 @@
 # Luna y Papel
 
-Papelería ficticia de Ñuñoa, Santiago. Es un proyecto académico de DSY1104 (Desarrollo Fullstack II), Evaluación Parcial N.º 2: la tienda HTML/CSS/JavaScript original se migró a **React** con **Bootstrap** y se le agregaron **pruebas unitarias con Jasmine y Karma**.
+Papelería ficticia de Ñuñoa, Santiago. Proyecto académico de DSY1104 (Desarrollo Fullstack II), Evaluación Parcial N.º 2. La tienda HTML/CSS/JavaScript original se migró a **Next.js (React)** con **Bootstrap**, una **API local simulada** para los productos y **pruebas con QUnit** que se ven en el navegador.
 
 Tiene tres secciones: **Inicio** (presentación, categorías informativas, video de lettering y datos de la tienda), **Productos** (catálogo de cuatro artículos) y **Pedido** (formulario con validación y cálculo del total).
 
-> El formulario es una **demostración académica**: no cobra, no envía correos y no guarda pedidos. No es un carrito de compras: se calcula el total de **un** producto por pedido.
+> El formulario es una **demostración académica**: no cobra, no envía correos y no guarda pedidos. No es un carrito de compras: calcula el total de **un** producto por pedido.
 
-## Tecnologías usadas
+## Tecnologías
 
 | Tecnología | Para qué |
 |---|---|
-| React 19 (JavaScript, archivos `.jsx`) | Componentes, propiedades y estados |
-| React Router 7 | Navegación entre `/`, `/productos` y `/pedido` |
-| Bootstrap 5.3 (CSS) | Diseño responsivo: contenedores, filas/columnas, tarjetas, formulario, botones |
-| Vite 8 | Servidor de desarrollo y compilación |
-| Jasmine 7 + Karma 6 | Pruebas unitarias, ejecutadas en Chrome sin ventana |
-| karma-coverage + babel-plugin-istanbul | Informe de cobertura |
-| @testing-library/react | Montar componentes reales y simular clics/escritura en las pruebas |
-
-Vite, JSX y React Router son **decisiones de implementación** del equipo; la pauta de la evaluación pide un framework JS como React, Bootstrap, y Jasmine/Karma, pero no exige esos nombres.
+| Next.js 16 + React 19 (`.jsx`) | Páginas, rutas (`/`, `/productos`, `/pedido`), componentes, propiedades y estados |
+| Bootstrap 5.3 (solo CSS) | Diseño responsivo |
+| API local (`api/servidor.js`, Node) | Entrega los productos en `http://localhost:3001/productos` |
+| QUnit 3 | Pruebas unitarias, ejecutadas en una página web |
+| esbuild + Testing Library + istanbul | Preparar las pruebas, montar componentes y medir cobertura |
 
 ## Requisitos
 
 - **Node.js 20 o superior** (verificado con Node v24.21.0 y npm 11.19.0).
-- **Google Chrome instalado** (Karma lo abre sin ventana para ejecutar las pruebas).
+- Un navegador (para ver las pruebas).
 
 ## Comandos
 
-Todos los comandos se ejecutan **dentro de la carpeta que contiene `package.json`** (la raíz de este proyecto).
+Todos se ejecutan **dentro de la carpeta que contiene `package.json`**.
 
 ```bash
-npm install        # instala dependencias (usa package-lock.json)
-npm run dev        # desarrollo: abre http://localhost:5173
-npm test           # ejecuta las 10 pruebas una vez y genera la cobertura en coverage/
-npm run test:watch # pruebas en modo continuo (vuelve a correr al guardar)
-npm run build      # compila para producción en dist/
-npm run preview    # sirve lo compilado
+npm install        # instala las dependencias (Next.js, React, Bootstrap, QUnit...)
+npm run api        # terminal 1: API de productos en http://localhost:3001/productos
+npm run dev        # terminal 2: la tienda en http://localhost:3000
+npm run test:web   # pruebas QUnit: imprime la URL (http://localhost:3002) para abrir en el navegador
+npm run build      # compila la tienda para producción
+npm start          # sirve lo compilado (después de npm run build)
 ```
 
-El informe de cobertura queda en `coverage/html/index.html` (carpeta que no se sube a Git). Una copia de la última ejecución está en `docs/evidencia/`.
+La tienda necesita la API encendida para mostrar los productos. Si la API está apagada, Productos y Pedido muestran un aviso que lo indica. `npm run test:web` no necesita la API.
 
 ## Organización de archivos
 
 ```
 package.json, package-lock.json   dependencias y comandos
-vite.config.js                    configuración de Vite
-karma.conf.cjs                    configuración de Karma/Jasmine/cobertura
-index.html                        página única donde React dibuja la app
+next.config.mjs                   configuración mínima de Next.js
+api/
+  servidor.js                     API simulada (Node, sin librerías): GET /productos y GET /productos/<id>
+  productos.json                  los 4 productos (única fuente de datos)
 public/imagenes/                  cuaderno.jpg y escritorio.jpg (imágenes originales)
 src/
-  main.jsx                        conecta React con index.html; importa Bootstrap y estilos
-  App.jsx                         encabezado + rutas + pie de página
-  pages/                          Inicio.jsx, Productos.jsx, Pedido.jsx
-  components/                     Encabezado, Menu, PiePagina, ListaProductos,
+  app/                            rutas de Next.js
+    layout.jsx                    estructura común: Bootstrap, encabezado y pie
+    page.jsx                      Inicio (/)
+    productos/page.jsx            Productos (/productos), pide los datos a la API
+    pedido/page.jsx               Pedido (/pedido), pide los datos a la API
+    estilos.css                   identidad visual (se carga después de Bootstrap)
+  components/                     Encabezado, EncabezadoConRuta, Menu, PiePagina, ListaProductos,
                                   TarjetaProducto, FormularioPedido, Boton, Mensaje
-  data/productos.js               catálogo único de 4 productos (usado por Productos y Pedido)
-  utils/                          validacionesPedido.js, calcularTotal.js
-  styles/estilos.css              identidad visual (se carga después de Bootstrap)
-tests/                            index.js y los archivos *.spec.js(x) con las 10 pruebas
+  utils/                          validacionesPedido.js, calcularTotal.js, productos.js, api.js
+tests/                            servidor.js (npm run test:web), cobertura.js y los *.spec.js(x)
 docs/                             ERS.md, TESTING.md, GUIA_PRESENTACION.md, evidencia/
-prototipo-html/                   sitio original HTML/CSS/JS, conservado solo como referencia
+prototipo-html/                   sitio original HTML/CSS/JS, solo como referencia
 ```
 
 ## Límites de la demostración
 
-- No hay backend, base de datos, cuentas de usuario, pagos ni carrito. El catálogo es un arreglo en `src/data/productos.js`.
+- La API es **simulada**: un servidor local con datos fijos en `api/productos.json`. No hay base de datos, cuentas, pagos ni carrito.
 - El pedido no se envía ni se guarda: solo se valida y se calcula el total.
-- Las pruebas **no usan mocks ni espías** (decisión del equipo). La pauta evalúa su uso, por lo que ese punto queda **pendiente**; ver `docs/TESTING.md`.
-- La cobertura mide solo el código de `src/`; no mide CSS, imágenes ni el video de YouTube.
+- Las pruebas **no usan mocks ni espías** (decisión del equipo) y usan **QUnit en lugar de Jasmine y Karma**, que son los que nombra la pauta. Ver `docs/TESTING.md`.
+- La cobertura mide `src/components` y `src/utils` (salvo `api.js` y `EncabezadoConRuta.jsx`); no mide `src/app`, CSS ni imágenes.
 
 ## Documentos
 
