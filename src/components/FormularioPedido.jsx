@@ -154,10 +154,10 @@ function FormularioPedido({ productos, productoInicial = "" }) {
         {hayErrores && <Mensaje tipo="error">Revisa los campos marcados.</Mensaje>}
         {resultado && (
           <Mensaje tipo="exito">
-            Cálculo de demostración: {resultado.cantidad} × {resultado.nombreProducto}.
+            Tu pedido: {resultado.cantidad} × {resultado.nombreProducto}.
             {" "}Total: <strong>{formatearPesos(resultado.total)}</strong>.
-            {" "}Este formulario es solo una demostración académica: no se realizó ningún cobro,
-            no se envió ningún correo y el pedido no se guardó.
+            {" "}Por ahora solo calculamos el total: no se cobra nada, no te enviamos un correo
+            y el pedido no queda guardado.
           </Mensaje>
         )}
       </div>

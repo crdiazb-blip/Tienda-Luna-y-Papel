@@ -113,7 +113,7 @@ Cambios respecto del sitio HTML original:
 3. **Tailwind CSS** para grilla, tarjetas, formulario y navegación responsiva, con los colores originales definidos como tema.
 4. **«Pedir» lleva al formulario con el producto preseleccionado.**
 5. **Validación más estricta que la original:** correo `algo@algo.algo` (antes bastaba con "@" y "."), cantidad solo entera de 1 a 10 (antes aceptaba decimales) y producto existente en el catálogo.
-6. **Mensaje de resultado honesto:** el original decía "Pedido recibido"; ahora indica que es un cálculo de demostración. El botón «Calcular y enviar» pasó a «Calcular total» porque no envía nada.
+6. **Mensaje de resultado honesto:** el original decía "Pedido recibido"; ahora le dice al cliente que por ahora solo se calcula el total y que no se cobra, no se envía correo y el pedido no queda guardado. El botón «Calcular y enviar» pasó a «Calcular total» porque no envía nada.
 7. **Pruebas automáticas con QUnit** que se ven en una página web, con tabla de cobertura.
 
 No se agregó (trabajo futuro posible): carrito con varios productos, persistencia de pedidos, panel de administración.
@@ -125,7 +125,7 @@ No se agregó (trabajo futuro posible): carrito con varios productos, persistenc
 | Paleta "azul/gris" y "fondo blanco/gris claro" | Fondo crema (cornsilk), verde oliva y dorado |
 | Planificador: "50 hojas desprendibles" | Descripción original: "50 hojas desprendibles para organizar cada semana." |
 | Estuche: "2 compartimentos" | Descripción original: "Estuche liviano con cierre y dos compartimentos." |
-| Mensaje de éxito "Pedido recibido. Total: $…" | Reemplazado por un mensaje de demostración |
+| Mensaje de éxito "Pedido recibido. Total: $…" | Reemplazado por un aviso que aclara que solo se calcula el total |
 | Sitio estático, sin dependencias, XAMPP/Apache | Next.js, Tailwind CSS y API local; se ejecuta con `npm run dev` y `npm run api` |
 | Sin base de datos ni API | Hay una API local simulada (sin base de datos) |
 | Tamaño < 500 KB, carga < 3 s, WCAG 2.1 AA | Metas no medidas o no verificadas (ver RNF-05) |
