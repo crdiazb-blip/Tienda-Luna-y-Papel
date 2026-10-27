@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function LayoutPrincipal({ children }) {
   return (
-    <html lang="es">
+    <html lang="es" data-scroll-behavior="smooth">
       <body>
         <EncabezadoConRuta />
         <main className="container-lg contenido">{children}</main>
