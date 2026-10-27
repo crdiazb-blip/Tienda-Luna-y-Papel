@@ -9,7 +9,7 @@
 ## 0. Origen de este documento
 
 - La versión 1.0 existía como `ERS_Luna_y_Papel.md` (septiembre de 2026) y describía el sitio HTML/CSS/JS. Esta versión la toma como base y la contrasta con el proyecto real.
-- La versión 2.0 describía una aplicación React con Vite y pruebas Jasmine/Karma. Esta versión 3.0 refleja el cambio decidido por el equipo a **Next.js, QUnit y una API local simulada**.
+- La versión 2.0 describía una aplicación React con Vite y pruebas Jasmine/Karma. Esta versión refleja el cambio decidido por el equipo a **Next.js, QUnit y una API local simulada**. El uso de Next.js fue autorizado por el docente, según informa el equipo (no hay una constancia escrita en este repositorio). QUnit, Tailwind CSS y la omisión de mocks son decisiones del equipo sin constancia de autorización.
 - La pauta pide entregar el ERS "añadiendo la propuesta personalizada, última versión". La propuesta está en la sección 8.
 
 ## 1. Propósito y alcance

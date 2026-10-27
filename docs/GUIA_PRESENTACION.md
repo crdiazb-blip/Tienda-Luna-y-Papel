@@ -15,7 +15,7 @@ Idea central: **la página se arma con piezas (componentes) reutilizables**, y N
 5. Las reglas están fuera de los componentes, en `src/utils/` (validaciones y total).
 6. Los componentes con estado o eventos llevan `"use client"` en la primera línea (`Encabezado`, `EncabezadoConRuta`, `FormularioPedido`): significa que se ejecutan en el navegador. Las páginas sin estado se dibujan en el servidor.
 
-Decisiones del equipo (no vienen de la pauta, que pide un framework JS como React, Bootstrap, y Jasmine y Karma): Next.js, API local, QUnit y Tailwind CSS en lugar de Bootstrap.
+Decisiones del equipo (no vienen de la pauta, que pide un framework JS como React, Bootstrap, y Jasmine y Karma): Next.js, API local, QUnit y Tailwind CSS en lugar de Bootstrap. **Next.js** lo autorizó el docente, según informa el equipo: se puede decir en la presentación, idealmente con el mensaje o correo donde lo autorizó a mano. QUnit, Tailwind CSS y la omisión de mocks no tienen autorización conocida y no deben presentarse como autorizados.
 
 ## 2. Ejemplo de propiedades y de estado (IE2.1.4)
 
