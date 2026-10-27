@@ -5,7 +5,6 @@ import Boton from "./Boton";
 import Mensaje from "./Mensaje";
 import { validarPedido } from "../utils/validacionesPedido";
 import { calcularTotal, formatearPesos } from "../utils/calcularTotal";
-import { buscarProducto } from "../utils/productos";
 
 const datosVacios = {
   nombre: "",
@@ -18,7 +17,7 @@ const datosVacios = {
 function FormularioPedido({ productos, productoInicial = "" }) {
   const [datos, setDatos] = useState({ ...datosVacios, producto: productoInicial });
   const [intentoEnvio, setIntentoEnvio] = useState(false);
-  const [resultado, setResultado] = useState(null);
+  const [total, setTotal] = useState(null);
 
   const errores = intentoEnvio ? validarPedido(datos, productos) : {};
   const hayErrores = Object.keys(errores).length > 0;
@@ -26,7 +25,7 @@ function FormularioPedido({ productos, productoInicial = "" }) {
   function cambiarCampo(evento) {
     const { name, value } = evento.target;
     setDatos({ ...datos, [name]: value });
-    setResultado(null);
+    setTotal(null);
   }
 
   function enviar(evento) {
@@ -34,21 +33,16 @@ function FormularioPedido({ productos, productoInicial = "" }) {
     setIntentoEnvio(true);
     const erroresActuales = validarPedido(datos, productos);
     if (Object.keys(erroresActuales).length > 0) {
-      setResultado(null);
+      setTotal(null);
       return;
     }
-    const producto = buscarProducto(productos, datos.producto);
-    setResultado({
-      nombreProducto: producto.nombre,
-      cantidad: Number(datos.cantidad),
-      total: calcularTotal(productos, datos.producto, datos.cantidad),
-    });
+    setTotal(calcularTotal(productos, datos.producto, datos.cantidad));
   }
 
   function limpiar() {
     setDatos(datosVacios);
     setIntentoEnvio(false);
-    setResultado(null);
+    setTotal(null);
   }
 
   function claseCampo(nombreCampo) {
@@ -152,12 +146,10 @@ function FormularioPedido({ productos, productoInicial = "" }) {
 
       <div aria-live="polite">
         {hayErrores && <Mensaje tipo="error">Revisa los campos marcados.</Mensaje>}
-        {resultado && (
+        {total !== null && (
           <Mensaje tipo="exito">
-            Tu pedido: {resultado.cantidad} × {resultado.nombreProducto}.
-            {" "}Total: <strong>{formatearPesos(resultado.total)}</strong>.
-            {" "}Por ahora solo calculamos el total: no se cobra nada, no te enviamos un correo
-            y el pedido no queda guardado.
+            Total: <strong>{formatearPesos(total)}</strong>. Por ahora solo calculamos el total:
+            no se cobra nada, no te enviamos un correo y el pedido no queda guardado.
           </Mensaje>
         )}
       </div>

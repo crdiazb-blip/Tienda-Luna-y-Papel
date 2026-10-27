@@ -79,7 +79,7 @@ Se activa con `@import "tailwindcss";` en `src/app/estilos.css` (y `postcss.conf
 
 **Proceso:** se escribe el caso, se recarga la página de pruebas, se corrige, se revisa la cobertura y se anotan los pendientes.
 
-**Resultados** (los registrados en `docs/TESTING.md`; vuelve a ejecutar antes de exponer y usa lo que veas): 10 de 10 pruebas pasan; cobertura de sentencias 94,59 %, ramas 93,85 %, funciones 89,29 %. Pendientes: pie de página, dos cierres del menú, mensaje de error de cantidad dentro del formulario y producto fuera del catálogo. La cobertura no mide `src/app`, la API, CSS ni imágenes, y no garantiza que cada línea esté bien verificada.
+**Resultados** (los registrados en `docs/TESTING.md`; vuelve a ejecutar antes de exponer y usa lo que veas): 10 de 10 pruebas pasan; cobertura de sentencias 94,52 %, ramas 93,85 %, funciones 89,29 %. Pendientes: pie de página, dos cierres del menú, mensaje de error de cantidad dentro del formulario y producto fuera del catálogo. La cobertura no mide `src/app`, la API, CSS ni imágenes, y no garantiza que cada línea esté bien verificada.
 
 **Sobre QUnit y la pauta, decir con claridad:** la pauta nombra Jasmine y Karma. El equipo decidió usar QUnit; esa diferencia no consta como autorizada por el docente.
 

@@ -44,7 +44,7 @@ Cada prueba sigue **Preparar → Ejecutar → Comprobar**. Cada `QUnit.test(...)
 | 6 | `tests/formularioPedido.spec.jsx` | Un formulario inválido muestra errores, no muestra total, y el error de un campo desaparece al corregirlo | Estado, validación, DOM |
 | 7 | `tests/validaciones.spec.js` | La cantidad acepta enteros de 1 a 10 y rechaza 0, 11, -1, 2.5, vacío y texto | Lógica |
 | 8 | `tests/validaciones.spec.js` | El total es precio × cantidad (6990 × 2 = 13980; 7500 × 3 = 22500), devuelve `null` si el producto no existe y se formatea `$13.980` | Lógica |
-| 9 | `tests/formularioPedido.spec.jsx` | Un formulario válido muestra el total correcto y el mensaje de demostración | Estado, evento de envío, DOM |
+| 9 | `tests/formularioPedido.spec.jsx` | Un formulario válido muestra el total correcto y el aviso de que no se cobra ni se guarda nada | Estado, evento de envío, DOM |
 | 10 | `tests/formularioPedido.spec.jsx` | «Limpiar» restablece campos, cantidad (vuelve a 1), errores y resultado | Estado, evento de clic |
 
 Los datos de las pruebas vienen de `api/productos.json`, el mismo archivo que sirve la API.
@@ -79,7 +79,7 @@ Cobertura de `src/components` y `src/utils` (tabla generada por la página de pr
 
 | Métrica | Cubierto | Total | % |
 |---|---|---|---|
-| Sentencias | 70 | 74 | 94,59 |
+| Sentencias | 69 | 73 | 94,52 |
 | Ramas | 61 | 65 | 93,85 |
 | Funciones | 25 | 28 | 89,29 |
 
@@ -100,7 +100,7 @@ Tarjetas y lista de productos, menú (apertura y ruta activa), formulario comple
 
 - **Pie de página** (`PiePagina.jsx`): ninguna prueba lo muestra; es solo texto.
 - **Encabezado, líneas 19 y 34:** cerrar el menú al pulsar la marca o al elegir un enlace. Se probó abrir/cerrar con el botón, no estos dos cierres.
-- **Mensaje de error de cantidad dentro del formulario** (`FormularioPedido.jsx`, línea 132): la regla se prueba como función (caso 7); ninguna prueba muestra ese error en pantalla. Se revisó a mano con 2.5.
+- **Mensaje de error de cantidad dentro del formulario** (`FormularioPedido.jsx`, línea 126): la regla se prueba como función (caso 7); ninguna prueba muestra ese error en pantalla. Se revisó a mano con 2.5.
 - **Producto fuera del catálogo** (`validacionesPedido.js`, línea 23): sin prueba.
 - **No cubierto por diseño:** la conexión con la API (`src/utils/api.js`), las páginas de `src/app/` (se ejecutan en el servidor de Next y no se montan en el navegador de pruebas) y `EncabezadoConRuta.jsx` (usa el enrutador de Next). Se revisaron a mano (sección 7).
 - **Mocks:** ver sección 4. Sin pruebas de extremo a extremo ni de otros navegadores.

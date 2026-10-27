@@ -7,7 +7,7 @@ Pruebas (en el orden en que QUnit las ejecutó):
  pass | 4. el menu marca como activo el enlace de la ruta actual
  pass | 5. un campo controlado cambia su valor al escribir y no muestra errores antes de enviar
  pass | 6. un formulario invalido muestra errores, no muestra total y el error se quita al corregir
- pass | 9. un formulario valido muestra el total correcto y el mensaje de demostracion
+ pass | 9. un formulario valido muestra el total correcto y el aviso de que no se cobra ni se guarda nada
  pass | 10. Limpiar restablece campos, cantidad, errores y resultado
  pass | 1. la lista muestra los cuatro productos con sus precios
  pass | 2. una tarjeta muestra los datos que recibe por propiedades
@@ -27,5 +27,5 @@ components/TarjetaProducto.jsx        100.00  100.00  100.00   lineas sin ejecut
 utils/calcularTotal.js                100.00  100.00  100.00   lineas sin ejecutar: -
 utils/productos.js                    100.00  100.00  100.00   lineas sin ejecutar: -
 utils/validacionesPedido.js            95.83   93.75  100.00   lineas sin ejecutar: 23
-TOTAL                                  94.59   93.85   89.29
-Sentencias 70/74 | Ramas 61/65 | Funciones 25/28
+TOTAL                                  94.52   93.85   89.29
+Sentencias 69/73 | Ramas 61/65 | Funciones 25/28

@@ -42,19 +42,18 @@ QUnit.module("Formulario de pedido (estado, validación y resultado)", (hooks) =
     assert.ok(screen.getByText("Selecciona un producto."));
     assert.ok(screen.getByText("Revisa los campos marcados."));
     assert.equal(screen.getByLabelText("Nombre completo").getAttribute("aria-invalid"), "true");
-    assert.equal(screen.queryByText(/Tu pedido:/), null);
+    assert.equal(screen.queryByText(/Total:/), null);
 
     escribir("Nombre completo", "Sofía Rojas");
     assert.equal(screen.queryByText("Escribe tu nombre completo (mínimo 3 letras)."), null);
     assert.ok(screen.getByText("Selecciona un producto."));
   });
 
-  QUnit.test("9. un formulario válido muestra el total correcto y el mensaje de demostración", (assert) => {
+  QUnit.test("9. un formulario válido muestra el total correcto y el aviso de que no se cobra ni se guarda nada", (assert) => {
     llenarDatosCorrectos();
     pulsarCalcular();
 
-    const resultado = screen.getByText(/Tu pedido:/);
-    assert.ok(resultado.textContent.includes("2 × Cuaderno Punteado"));
+    const resultado = screen.getByText(/Total:/);
     assert.ok(resultado.textContent.includes("Total: $13.980"));
     assert.ok(resultado.textContent.includes("no se cobra nada"));
     assert.equal(screen.queryByText("Revisa los campos marcados."), null);
@@ -67,13 +66,13 @@ QUnit.module("Formulario de pedido (estado, validación y resultado)", (hooks) =
       assert.equal(screen.getByLabelText("Producto").value, "");
       assert.equal(screen.getByLabelText(/Cantidad/).value, "1");
       assert.equal(screen.getByLabelText("Comentario opcional").value, "");
-      assert.equal(screen.queryByText(/Tu pedido:/), null);
+      assert.equal(screen.queryByText(/Total:/), null);
       assert.equal(screen.queryByText("Revisa los campos marcados."), null);
     }
 
     llenarDatosCorrectos();
     pulsarCalcular();
-    assert.ok(screen.getByText(/Tu pedido:/));
+    assert.ok(screen.getByText(/Total:/));
     fireEvent.click(screen.getByRole("button", { name: "Limpiar" }));
     verificarFormularioEnBlanco();
 
